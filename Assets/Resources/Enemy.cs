@@ -22,7 +22,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetButton("Jump"))
+            Shoot();
     }
 
     protected void Shoot ()
@@ -37,9 +38,15 @@ public class Enemy : MonoBehaviour
             GetComponent<Animator>().SetBool("ShootClick", false);
 
             cooldown = Time.time + time;
-            NextFire = false;
+        }
+    }
 
+    protected void InstantiateBullet ()
+    {
+       if (NextFire)
+        {
             Instantiate(Resources.Load("Bullet/Bullet"), transform.GetChild(0).position, transform.GetChild(0).rotation);
+            NextFire = false;
         }
     }
 
