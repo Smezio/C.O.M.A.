@@ -13,7 +13,7 @@ public class EnemyDashClass : EnemyClass
     void Awake()
     {
         enemyType = "Dash";
-        healtPoint = 2;
+        healthPoint = 2;
         speed = 1;
         immune = false;
         cooldown = 0.5f;
@@ -34,10 +34,13 @@ public class EnemyDashClass : EnemyClass
 
     private void Movement()
     {
-        pos.y = pos.y + amplitude * Mathf.Sin(t);
-        pos.x += speed * Time.deltaTime;
-        t += Time.deltaTime * frequency;
-        transform.position = pos;
+        if (healthPoint > 0)
+        {
+            pos.y = pos.y + amplitude * Mathf.Sin(t);
+            pos.x += speed * Time.deltaTime;
+            t += Time.deltaTime * frequency;
+            transform.position = pos;
+        }
     }
 
     private void Rotation()

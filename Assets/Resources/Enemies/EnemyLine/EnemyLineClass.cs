@@ -10,17 +10,17 @@ public class EnemyLineClass : EnemyClass
     void Awake()
     {
         enemyType = "Inline";
-        healtPoint = 2;
-        speed = 1;
+        healthPoint = 2;
+        speed = 0.5f;
         bulletType = "Inline";
         immune = false;
-        cooldown = 0.8f;
+        cooldown = 5f;
         score = 10;
     }
 
     void Start()
     {
-        direction = Movement();
+        direction = Facing();
     }
 
     // Update is called once per frame
@@ -28,7 +28,9 @@ public class EnemyLineClass : EnemyClass
     {
         Rotation();
         Shoot();
-        transform.Translate(direction.normalized * Time.deltaTime * speed);
+
+        if (healthPoint > 0)
+            transform.Translate(direction.normalized * Time.deltaTime * speed);
     }
 
     private void Rotation()
@@ -43,7 +45,7 @@ public class EnemyLineClass : EnemyClass
         }
     }
 
-    private Vector3 Movement()
+    private Vector3 Facing()
     {
         Vector3 dir;
         if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)

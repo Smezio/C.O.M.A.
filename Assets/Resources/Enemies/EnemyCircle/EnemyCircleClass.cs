@@ -14,7 +14,7 @@ public class EnemyCircleClass : EnemyClass
     void Awake()
     {
         enemyType = "Circle";
-        healtPoint = 2;
+        healthPoint = 2;
         speed = 0.5f;
         bulletType = "Direct";
         immune = false;
@@ -38,11 +38,14 @@ public class EnemyCircleClass : EnemyClass
 
     private void Movement()
     {
-        pos.x = centerx + amplitude * Mathf.Cos(t);
-        pos.y = centery + amplitude * Mathf.Sin(t);
-        t += Time.deltaTime * speedRotation;
-        centerx += Time.deltaTime * speed;
-        transform.position = pos;
+        if (healthPoint > 0)
+        {
+            pos.x = centerx + amplitude * Mathf.Cos(t);
+            pos.y = centery + amplitude * Mathf.Sin(t);
+            t += Time.deltaTime * speedRotation;
+            centerx += Time.deltaTime * speed;
+            transform.position = pos;
+        }
     }
 
     private void Rotation()

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyClass : MonoBehaviour
 {
     protected string enemyType;
-    protected float healtPoint;
+    protected float healthPoint;
     protected float speed;
     protected string bulletType;
     protected bool immune;
@@ -35,7 +35,6 @@ public class EnemyClass : MonoBehaviour
         if (nextFire && Time.time > resetTime)
         {
             GetComponent<Animator>().SetBool("ShootClick", true);
-            GetComponent<Animator>().Play("Shoot");
 
             resetTime = Time.time + cooldown;
         }
@@ -50,11 +49,11 @@ public class EnemyClass : MonoBehaviour
     public void TakeDamage (float damage)
     {
         if (!immune)
-            healtPoint -= damage;
+            healthPoint -= damage;
 
-        Debug.Log(healtPoint);
+        Debug.Log(healthPoint);
 
-        if (healtPoint <= 0)
+        if (healthPoint <= 0)
             GetComponent<Animator>().SetBool("Death", true);
     }
 
@@ -65,7 +64,7 @@ public class EnemyClass : MonoBehaviour
 
     protected float GetHealtPoint ()
     {
-        return healtPoint;
+        return healthPoint;
     }
 
     protected string GetEnemyType ()
@@ -85,7 +84,7 @@ public class EnemyClass : MonoBehaviour
 
     public void SetHealtPoint (float value)
     {
-        healtPoint = value;
+        healthPoint = value;
     }
 
     protected void SetEnemyType (string name)

@@ -58,9 +58,18 @@ public class PlayerStatus : MonoBehaviour
             return;
 
         healthPoint -= damage;
-        Debug.Log(healthPoint);
 
         if (healthPoint <= 0)
             GetComponent<Animator>().SetBool("Death", true);
+    }
+
+    protected void DestroyTobina()
+    {
+        GameObject.Destroy(this.gameObject);
+    }
+
+    public float GetHealthPoint()
+    {
+        return healthPoint;
     }
 }

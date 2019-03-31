@@ -9,7 +9,7 @@ public class EnemyChargerClass : EnemyClass
     void Awake()
     {
         enemyType = "Charger";
-        healtPoint = 2;
+        healthPoint = 2;
         speed = 3f;
         bulletType = "Deflect";
         immune = true;
@@ -29,7 +29,8 @@ public class EnemyChargerClass : EnemyClass
 
     private void Movement()
     {
-        transform.Translate(target*Time.deltaTime *speed );
+        if (healthPoint > 0)
+            transform.Translate(target*Time.deltaTime *speed );
     }
 
     private void Rotation()
