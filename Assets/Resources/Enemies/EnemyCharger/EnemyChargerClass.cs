@@ -10,7 +10,7 @@ public class EnemyChargerClass : EnemyClass
     {
         enemyType = "Charger";
         healthPoint = 2;
-        speed = 3f;
+        speed = 2f;
         bulletType = "Deflect";
         immune = true;
         cooldown = 0.5f;
@@ -23,6 +23,7 @@ public class EnemyChargerClass : EnemyClass
     // Update is called once per frame
     void Update()
     {
+        CheckBounds();
         Movement();
 
     }

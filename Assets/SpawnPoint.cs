@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿//using System;
 using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
+    public GameObject[] enemies;
 
     private int frameCount;
     private float timer;
@@ -34,6 +33,8 @@ public class SpawnPoint : MonoBehaviour
             frameCount = 0;
 
             // TODO: INSTANTIATE ENEMY HERE!!!
+            int index = Random.Range(0, enemies.Length - 1);
+            Instantiate(enemies[index], transform.position, transform.rotation);
         }
     }
 }

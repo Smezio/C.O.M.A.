@@ -44,4 +44,9 @@ public class PlayerMovement : MonoBehaviour
     {
         return facing;
     }
+
+    public void DisableParry()
+    {
+        GetComponent<Animator>().SetBool("ParryClick", false);
+    }
 }

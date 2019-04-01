@@ -14,11 +14,14 @@ public class PlayerShoot : MonoBehaviour
     private float cooldown;
     private float time;
 
+    private AudioSource audio;
+
     // Start is called before the first frame update
     void Start()
     {
         time = 2f;
         pm = GetComponent<PlayerMovement>();
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -57,6 +60,8 @@ public class PlayerShoot : MonoBehaviour
             obj.GetComponent<SpriteRenderer>().flipX = pm.GetFacing();
 
             NextFire = false;
+
+            audio.Play();
         }
     }
 }

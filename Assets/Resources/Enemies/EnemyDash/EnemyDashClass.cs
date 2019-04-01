@@ -16,17 +16,18 @@ public class EnemyDashClass : EnemyClass
         healthPoint = 2;
         speed = 1;
         immune = false;
-        cooldown = 0.5f;
+        cooldown = 2f;
         score = 20;
 
-        frequency = 10f;
-        amplitude = 0.2f;
+        frequency = 20f;
+        amplitude = 0.1f;
         pos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        CheckBounds();
         Movement();
         Rotation();
         Shoot();

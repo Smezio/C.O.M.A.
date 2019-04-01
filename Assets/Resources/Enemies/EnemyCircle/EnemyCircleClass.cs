@@ -18,7 +18,7 @@ public class EnemyCircleClass : EnemyClass
         speed = 0.5f;
         bulletType = "Direct";
         immune = false;
-        cooldown = 0.5f;
+        cooldown = 2f;
         score = 30;
 
         pos = transform.position;
@@ -31,6 +31,7 @@ public class EnemyCircleClass : EnemyClass
     // Update is called once per frame
     void Update()
     {
+        CheckBounds();
         Movement();
         Rotation();
         Shoot();

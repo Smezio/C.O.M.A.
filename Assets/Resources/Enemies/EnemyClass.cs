@@ -62,7 +62,15 @@ public class EnemyClass : MonoBehaviour
         GameObject.Destroy(this.gameObject);
     }
 
-    protected float GetHealtPoint ()
+    protected void CheckBounds()
+    {
+        var pos = transform.position;
+        if (pos.x > 2.1f || pos.x< -2.1f || pos.y> 1.4f || pos.y< -1.4f)
+            GameObject.Destroy(gameObject);
+    }
+
+
+protected float GetHealtPoint ()
     {
         return healthPoint;
     }

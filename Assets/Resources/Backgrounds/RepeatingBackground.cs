@@ -25,6 +25,7 @@ public class RepeatingBackground : MonoBehaviour
 
     private void changePosition()
     {
+        float z = transform.position.z;
         Vector2 offset = new Vector2(horizontalLength * 2, 0);
         transform.position = (Vector2)transform.position + offset;
     }
