@@ -1,2 +1,2 @@
 # coma
-LightNight game jaa submission
+LightNight game jam submission
