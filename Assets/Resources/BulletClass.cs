@@ -29,7 +29,6 @@ public class BulletClass : MonoBehaviour
         {
             if (target.Equals("Enemy"))
             {
-                Debug.Log("DIOOOO");
                 if (col.gameObject.name.Contains("Line"))
                     col.gameObject.GetComponent<EnemyLineClass>().TakeDamage(damage);
                 else if (col.gameObject.name.Contains("Dash"))
@@ -41,7 +40,7 @@ public class BulletClass : MonoBehaviour
             }
             else if (target.Equals("Player"))
             {
-                col.gameObject.GetComponent<PlayerStatus>().TakeDamage(damage);
+                col.gameObject.GetComponent<PlayerClass>().TakeDamage(damage);
                 GameObject.Destroy(this.gameObject);
             }
         }

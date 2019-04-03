@@ -113,7 +113,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a51ffeebe10cdc41bfbcf3f69b7e131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletType: Direct
+  healthPoint: 2
+  speed: 1
+  score: 20
+  cooldown: 2
+  frequency: 20
+  amplitude: 0.1
 --- !u!1 &1637536381810437858
 GameObject:
   m_ObjectHideFlags: 0

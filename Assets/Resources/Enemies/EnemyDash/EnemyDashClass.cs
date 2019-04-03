@@ -4,23 +4,16 @@ using UnityEngine;
 
 public class EnemyDashClass : EnemyClass
 {
-    public new string bulletType;
-    Vector3 pos;
-    float t;
-    float frequency;
-    float amplitude;
+    private new string bulletType;
+    private Vector3 pos;
+    private float t;
+    public float frequency;
+    public float amplitude;
 
     void Awake()
     {
         enemyType = "Dash";
-        healthPoint = 2;
-        speed = 1;
         immune = false;
-        cooldown = 2f;
-        score = 20;
-
-        frequency = 20f;
-        amplitude = 0.1f;
         pos = transform.position;
     }
 

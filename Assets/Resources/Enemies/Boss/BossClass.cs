@@ -11,14 +11,10 @@ public class BossClass : EnemyClass
     void Start()
     {
         enemyType = "Boss";
-        healthPoint = 10;
-        speed = 0.8f;
         bulletType = "Direct";
-        score = 100;
         immune = false;
 
         canShoot = false;
-        cooldown = 5f;
         direction = Vector3.zero;
     }
 

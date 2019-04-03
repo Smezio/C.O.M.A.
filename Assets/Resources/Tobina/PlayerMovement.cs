@@ -3,7 +3,6 @@
 public class PlayerMovement : MonoBehaviour
 {
     public float speed;
-
     private Rigidbody2D rb2d;
     private BoxCollider2D collider;
     private SpriteRenderer renderer;

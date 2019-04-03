@@ -4,28 +4,22 @@ using UnityEngine;
 
 public class EnemyCircleClass : EnemyClass
 {
-    Vector3 pos;
-    float centerx;
-    float centery;
-    float amplitude;
-    float speedRotation;
-    float t;
+    private Vector3 pos;
+    private float centerx;
+    private float centery;
+    public float amplitude;
+    public float speedRotation;
+    private float t;
 
     void Awake()
     {
         enemyType = "Circle";
-        healthPoint = 2;
-        speed = 0.5f;
         bulletType = "Direct";
         immune = false;
-        cooldown = 2f;
-        score = 30;
 
         pos = transform.position;
         centerx = pos.x;
         centery = pos.y;
-        speedRotation = 5f;
-        amplitude = 0.5f;
     }
 
     // Update is called once per frame

@@ -10,12 +10,8 @@ public class EnemyLineClass : EnemyClass
     void Awake()
     {
         enemyType = "Inline";
-        healthPoint = 2;
-        speed = 0.5f;
         bulletType = "Inline";
         immune = false;
-        cooldown = 5f;
-        score = 10;
     }
 
     void Start()

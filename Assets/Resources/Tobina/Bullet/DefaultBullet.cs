@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DefaultBullet : BulletClass
 {
-    private PlayerMovement pm;
+    private PlayerClass pm;
 
     // Start is called before the first frame update
     void Start()
@@ -14,7 +14,7 @@ public class DefaultBullet : BulletClass
         damage = 2;
         target = "Enemy";
 
-        pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerClass>();
         BulletDirection();
     }
 

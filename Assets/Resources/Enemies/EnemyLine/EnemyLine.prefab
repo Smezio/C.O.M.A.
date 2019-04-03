@@ -162,6 +162,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7bbc93ec1dc3f8478c4b90529a8c1fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthPoint: 2
+  speed: 0.5
+  score: 10
+  cooldown: 5
 --- !u!1 &6969390476192392699
 GameObject:
   m_ObjectHideFlags: 0

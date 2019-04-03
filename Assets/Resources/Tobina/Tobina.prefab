@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1867435540}
   m_Layer: 0
-  m_Name: BulletSpawn
+  m_Name: LBulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3839174356613584017}
   m_Layer: 0
-  m_Name: BulletSpawn
+  m_Name: RBulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -155,10 +155,8 @@ GameObject:
   - component: {fileID: 3839174357448040399}
   - component: {fileID: 3839174357448040373}
   - component: {fileID: 3839174357448040370}
-  - component: {fileID: 3839174357448040371}
-  - component: {fileID: 727784019}
-  - component: {fileID: 8172007934039336851}
   - component: {fileID: 5879444300456208317}
+  - component: {fileID: 6848862997753599346}
   m_Layer: 0
   m_Name: Tobina
   m_TagString: Player
@@ -220,7 +218,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bbc1031b2e76c5447b8150e4701af6f2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 448a78eae4fd4184c883754008c5401e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -228,7 +226,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &3839174357448040399
@@ -297,48 +295,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9878824, y: 0.997116}
   m_EdgeRadius: 0
---- !u!114 &3839174357448040371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3839174357448040396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f48030790a44e459d95411439f9c62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 30
---- !u!114 &727784019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3839174357448040396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d89ba63d97285b64fb35573040ae1f9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bullet: {fileID: 6477088380431855885, guid: f573a81ea5e35204a98be59b975cb20a, type: 3}
-  rightBulletSpawn: {fileID: 3839174356613584017}
-  leftBulletSpawn: {fileID: 1867435540}
---- !u!114 &8172007934039336851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3839174357448040396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5968afed4ac527842892063492a1db35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxhealthPoint: 4
-  immuneDuration: 10
 --- !u!82 &5879444300456208317
 AudioSource:
   m_ObjectHideFlags: 0
@@ -435,3 +391,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6848862997753599346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3839174357448040396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 015479c30f7e894458272d01592e45b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxhealthPoint: 4
+  immuneDuration: 10
+  speed: 30
+  defaultBullet: {fileID: 6477088380431855885, guid: f573a81ea5e35204a98be59b975cb20a,
+    type: 3}
+  cooldown: 1

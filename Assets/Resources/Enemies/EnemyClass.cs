@@ -5,15 +5,15 @@ using UnityEngine;
 public class EnemyClass : MonoBehaviour
 {
     protected string enemyType;
-    protected float healthPoint;
-    protected float speed;
+    public float healthPoint;
+    public float speed;
     protected string bulletType;
     protected bool immune;
-    protected int score;
+    public int score;
 
     protected bool nextFire;
     protected float resetTime;
-    protected float cooldown;
+    public float cooldown;
 
     // Start is called before the first frame update
     void Awake()
@@ -40,7 +40,7 @@ public class EnemyClass : MonoBehaviour
         }
     }
 
-    protected void DisableShoot()
+    protected void DisableShootAnimation()
     {
         GetComponent<Animator>().SetBool("ShootClick", false);
     }
@@ -50,8 +50,6 @@ public class EnemyClass : MonoBehaviour
     {
         if (!immune)
             healthPoint -= damage;
-
-        Debug.Log(healthPoint);
 
         if (healthPoint <= 0)
             GetComponent<Animator>().SetBool("Death", true);

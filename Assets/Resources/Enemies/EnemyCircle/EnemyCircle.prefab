@@ -192,3 +192,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c626ca7eebe98dd439e2c4e513ed4cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthPoint: 2
+  speed: 0.5
+  score: 30
+  cooldown: 2
+  amplitude: 0.5
+  speedRotation: 5

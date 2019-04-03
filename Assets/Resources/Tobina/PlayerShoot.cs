@@ -14,38 +14,42 @@ public class PlayerShoot : MonoBehaviour
     private float cooldown;
     private float time;
 
-    private AudioSource audio;
+    private AudioSource audioShoot;
 
     // Start is called before the first frame update
     void Start()
     {
         time = 2f;
         pm = GetComponent<PlayerMovement>();
-        audio = GetComponent<AudioSource>();
+        audioShoot = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot();
-        }
+        Shoot();
     }
 
     private void Shoot()
     {
-        if (Time.time > cooldown)
-            NextFire = true;
-
-        if (NextFire && Time.time > cooldown)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            GetComponent<Animator>().SetBool("ShootClick", true);
-            GetComponent<Animator>().Play("Shoot");
-            GetComponent<Animator>().SetBool("ShootClick", false);
+            if (Time.time > cooldown)
+                NextFire = true;
 
-            cooldown = Time.time + time;
+            if (NextFire && Time.time > cooldown)
+            {
+                GetComponent<Animator>().SetBool("ShootClick", true);
+
+                cooldown = Time.time + time;
+            }
         }
+    }
+
+    /* Aggiungere evento nell'animazione */
+    protected void DisableShootAnimation()
+    {
+        GetComponent<Animator>().SetBool("ShootClick", false);
     }
 
     protected void InstantiateBullet()
@@ -61,7 +65,7 @@ public class PlayerShoot : MonoBehaviour
 
             NextFire = false;
 
-            audio.Play();
+            audioShoot.Play();
         }
     }
 }

@@ -4,32 +4,25 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    /* Status properties */
     public float maxhealthPoint = 4;
     private float healthPoint;
-
-    private BoxCollider2D collider;
-
     private bool immune;
     public float immuneDuration = 10; // sec
     private float immuneTimer;
 
     void Start()
     {
-        collider = GetComponent<BoxCollider2D>();
         healthPoint = maxhealthPoint;
         immuneTimer = immuneDuration;
     }
 
     void Update()
     {
-        if (immune)
-        {
-            immuneTimer -= Time.deltaTime;
-            if (immuneTimer <= 0)
-                immune = false;
-        }       
+        ImmuneControl();
     }
 
+    /* Collisioni power up */
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "PowerUp")
@@ -61,6 +54,16 @@ public class PlayerStatus : MonoBehaviour
 
         if (healthPoint <= 0)
             GetComponent<Animator>().SetBool("Death", true);
+    }
+
+    public void ImmuneControl()
+    {
+        if (immune)
+        {
+            immuneTimer -= Time.deltaTime;
+            if (immuneTimer <= 0)
+                immune = false;
+        }
     }
 
     protected void DestroyTobina()
