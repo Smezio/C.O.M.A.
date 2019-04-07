@@ -6,7 +6,7 @@ public class EnemyChargerClass : EnemyClass
 {
     Vector3 target;
 
-    void Awake()
+    void Start()
     {
         enemyType = "Charger";
         healthPoint = 2;
@@ -15,9 +15,9 @@ public class EnemyChargerClass : EnemyClass
         immune = true;
         cooldown = 0.5f;
         score = 10000;
-
+        
         target = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
-        Rotation();
+        Direction();
     }
 
     // Update is called once per frame
@@ -25,16 +25,18 @@ public class EnemyChargerClass : EnemyClass
     {
         CheckBounds();
         Movement();
-
     }
 
     private void Movement()
     {
-        if (healthPoint > 0)
-            transform.Translate(target*Time.deltaTime *speed );
+        if (canMove)
+        {
+            if (healthPoint > 0)
+                transform.Translate(target * Time.deltaTime * speed);
+        }
     }
 
-    private void Rotation()
+    private void Direction()
     {
         if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
         {

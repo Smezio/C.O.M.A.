@@ -7,37 +7,40 @@ public class EnemyLineClass : EnemyClass
 
     Vector3 direction;
 
-    void Awake()
+    void Start()
     {
         enemyType = "Inline";
         bulletType = "Inline";
         immune = false;
-    }
+        score = 10;
 
-    void Start()
-    {
         direction = Facing();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Rotation();
+        CheckBounds();
+        Movement();
         Shoot();
-
-        if (healthPoint > 0)
-            transform.Translate(direction.normalized * Time.deltaTime * speed);
     }
 
-    private void Rotation()
+    private void Movement()
     {
-        if (GameObject.FindGameObjectWithTag("Player").transform.position.y > transform.position.y)
+        if (canMove)
         {
-             transform.rotation = Quaternion.Euler(0, 0, 90);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0, 0, -90);
+            if (healthPoint > 0)
+                transform.Translate(direction.normalized * Time.deltaTime * speed);
+
+            if (GameObject.FindGameObjectWithTag("Player").transform.position.y > transform.position.y)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0, 0, -90);
+            }
         }
     }
 

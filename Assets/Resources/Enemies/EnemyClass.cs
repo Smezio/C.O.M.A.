@@ -9,16 +9,25 @@ public class EnemyClass : MonoBehaviour
     public float speed;
     protected string bulletType;
     protected bool immune;
-    public int score;
+    protected int score;
 
+    protected bool canMove;
+    protected bool canShoot;
     protected bool nextFire;
     protected float resetTime;
     public float cooldown;
 
+    private float pauseStart;
+    private float pauseFinish;
+
     // Start is called before the first frame update
     void Awake()
     {
+        canMove = true;
+        canShoot = true;
 
+        pauseStart = 0;
+        pauseFinish = 0;
     }
 
     // Update is called once per frame
@@ -29,14 +38,20 @@ public class EnemyClass : MonoBehaviour
 
     protected void Shoot ()
     {
-        if (Time.time > resetTime)
-            nextFire = true;
-
-        if (nextFire && Time.time > resetTime)
+        if (canShoot)
         {
-            GetComponent<Animator>().SetBool("ShootClick", true);
+            if ((Time.time - (pauseFinish - pauseStart)) > resetTime)
+                nextFire = true;
 
-            resetTime = Time.time + cooldown;
+            if (nextFire && (Time.time - (pauseFinish - pauseStart)) > resetTime)
+            {
+                pauseStart = 0;
+                pauseFinish = 0;
+
+                GetComponent<Animator>().SetBool("ShootClick", true);
+
+                resetTime = Time.time + cooldown;
+            }
         }
     }
 
@@ -44,7 +59,6 @@ public class EnemyClass : MonoBehaviour
     {
         GetComponent<Animator>().SetBool("ShootClick", false);
     }
-
 
     public void TakeDamage (float damage)
     {
@@ -60,6 +74,22 @@ public class EnemyClass : MonoBehaviour
         GameObject.Destroy(this.gameObject);
     }
 
+    public void PauseOn()
+    {
+        canShoot = false;
+        canMove = false;
+        pauseStart = Time.time;
+        GetComponent<Animator>().enabled = false;
+    }
+
+    public void PauseOff()
+    {
+        canShoot = true;
+        canMove = true;
+        pauseFinish = Time.time;
+        GetComponent<Animator>().enabled = true;
+    }
+
     protected void CheckBounds()
     {
         var pos = transform.position;
@@ -68,43 +98,8 @@ public class EnemyClass : MonoBehaviour
     }
 
 
-protected float GetHealtPoint ()
+    public int Score
     {
-        return healthPoint;
-    }
-
-    protected string GetEnemyType ()
-    {
-        return enemyType;
-    }
-
-    protected float GetSpeed()
-    {
-        return speed;
-    }
-
-    protected string GetBulletType()
-    {
-        return bulletType;
-    }
-
-    public void SetHealtPoint (float value)
-    {
-        healthPoint = value;
-    }
-
-    protected void SetEnemyType (string name)
-    {
-        enemyType = name;
-    }
-
-    protected void SetSpeed (float value)
-    {
-        speed = value;
-    }
-
-    protected void SetBulletType (string name)
-    {
-        bulletType = name;
+        get { return score; }
     }
 }

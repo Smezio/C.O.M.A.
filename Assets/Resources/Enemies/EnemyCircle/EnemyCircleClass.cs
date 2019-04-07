@@ -11,11 +11,12 @@ public class EnemyCircleClass : EnemyClass
     public float speedRotation;
     private float t;
 
-    void Awake()
+    void Start()
     {
         enemyType = "Circle";
         bulletType = "Direct";
         immune = false;
+        score = 20;
 
         pos = transform.position;
         centerx = pos.x;
@@ -26,32 +27,31 @@ public class EnemyCircleClass : EnemyClass
     void Update()
     {
         CheckBounds();
-        Movement();
-        Rotation();
         Shoot();
+        Movement();
     }
 
     private void Movement()
     {
-        if (healthPoint > 0)
+        if (canMove)
         {
-            pos.x = centerx + amplitude * Mathf.Cos(t);
-            pos.y = centery + amplitude * Mathf.Sin(t);
-            t += Time.deltaTime * speedRotation;
-            centerx += Time.deltaTime * speed;
-            transform.position = pos;
-        }
-    }
+            if (healthPoint > 0)
+            {
+                pos.x = centerx + amplitude * Mathf.Cos(t);
+                pos.y = centery + amplitude * Mathf.Sin(t);
+                t += Time.deltaTime * speedRotation;
+                centerx += Time.deltaTime * speed;
+                transform.position = pos;
+            }
 
-    private void Rotation()
-    {
-        if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
+            if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
         }
     }
 

@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class EnemyDashClass : EnemyClass
 {
-    private new string bulletType;
     private Vector3 pos;
     private float t;
     public float frequency;
     public float amplitude;
 
-    void Awake()
+    void Start()
     {
         enemyType = "Dash";
+        bulletType = "Direct";
         immune = false;
+        score = 30;
+
         pos = transform.position;
     }
 
@@ -21,31 +23,30 @@ public class EnemyDashClass : EnemyClass
     void Update()
     {
         CheckBounds();
-        Movement();
-        Rotation();
         Shoot();
+        Movement();
     }
 
     private void Movement()
     {
-        if (healthPoint > 0)
+        if (canMove)
         {
-            pos.y = pos.y + amplitude * Mathf.Sin(t);
-            pos.x += speed * Time.deltaTime;
-            t += Time.deltaTime * frequency;
-            transform.position = pos;
-        }
-    }
+            if (healthPoint > 0)
+            {
+                pos.y = pos.y + amplitude * Mathf.Sin(t);
+                pos.x += speed * Time.deltaTime;
+                t += Time.deltaTime * frequency;
+                transform.position = pos;
+            }
 
-    private void Rotation()
-    {
-        if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
+            if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
         }
     }
 
@@ -53,10 +54,7 @@ public class EnemyDashClass : EnemyClass
     {
         if (nextFire)
         {
-            if (bulletType.Equals("Direct"))
-                Instantiate(Resources.Load("Enemies/Bullets/DirectBullet"), transform.GetChild(0).position, transform.GetChild(0).rotation);
-            else if (bulletType.Equals("4Dir"))
-                Instantiate(Resources.Load("Enemies/Bullets/AllDirBullet"), transform.GetChild(0).position, transform.GetChild(0).rotation);
+            Instantiate(Resources.Load("Enemies/Bullets/DirectBullet"), transform.GetChild(0).position, transform.GetChild(0).rotation);
             nextFire = false;
         }
     }
