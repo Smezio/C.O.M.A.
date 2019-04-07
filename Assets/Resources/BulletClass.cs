@@ -5,15 +5,17 @@ using UnityEngine;
 public class BulletClass : MonoBehaviour
 {
     protected string type;
-    protected float speed;
-    protected float damage;
+    public float speed;
+    public float damage;
     protected string target;
     protected Vector3 direction;
 
+    protected bool canMove;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        canMove = true;
     }
 
     // Update is called once per frame
@@ -22,20 +24,14 @@ public class BulletClass : MonoBehaviour
 
     }
 
-
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag.Equals(target))
         {
             if (target.Equals("Enemy"))
             {
-                if (col.gameObject.name.Contains("Line"))
-                    col.gameObject.GetComponent<EnemyLineClass>().TakeDamage(damage);
-                else if (col.gameObject.name.Contains("Dash"))
-                    col.gameObject.GetComponent<EnemyDashClass>().TakeDamage(damage);
-                else if (col.gameObject.name.Contains("Circle"))
-                    col.gameObject.GetComponent<EnemyCircleClass>().TakeDamage(damage);
-
+                col.gameObject.GetComponent<EnemyClass>().TakeDamage(damage);
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerClass>().Score += col.gameObject.GetComponent<EnemyClass>().Score;
                 GameObject.Destroy(this.gameObject);
             }
             else if (target.Equals("Player"))
@@ -46,43 +42,52 @@ public class BulletClass : MonoBehaviour
         }
     }
 
-    protected string GetBulletType ()
+    public void PauseOn()
     {
-        return type;
+        canMove = false;
+        GetComponent<Animator>().enabled = false;
     }
 
-    protected float GetSpeed()
+    public void PauseOff()
     {
-        return speed;
+        canMove = true;
+        GetComponent<Animator>().enabled = true;
     }
 
-    protected float GetDamage()
+    protected void CheckBounds()
     {
-        return damage;
+        var pos = transform.position;
+        if (pos.x > 2.1f || pos.x < -2.1f || pos.y > 1.4f || pos.y < -1.4f)
+            GameObject.Destroy(gameObject);
     }
 
-    protected Vector2 GetDirection()
+    public float Damage
     {
-        return direction;
+        get { return damage; }
+        set { damage = value; }
     }
 
-    protected void SetBulletType(string name)
+    public string Target
     {
-        type = name;
+        get { return target; }
+        set { target = value; }
     }
 
-    public void SetSpeed(float value)
+    protected string Type
     {
-        speed = value;
+        get { return type; }
+        set { type = value; }
     }
 
-    protected void SetDamage(float value)
+    public float Speed
     {
-        damage = value;
+        get { return speed; }
+        set { speed = value; }
     }
 
-    public void SetDirection(Vector2 values)
+    public Vector2 Direction
     {
-        direction = values;
+        get { return direction; }
+        set { direction = value; }
     }
 }

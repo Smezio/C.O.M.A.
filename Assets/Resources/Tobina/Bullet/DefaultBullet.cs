@@ -10,8 +10,6 @@ public class DefaultBullet : BulletClass
     void Start()
     {
         type = "Inline";
-        speed = 0.5f;
-        damage = 2;
         target = "Enemy";
 
         pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerClass>();
@@ -21,12 +19,16 @@ public class DefaultBullet : BulletClass
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(direction * Time.deltaTime * speed);
+        CheckBounds();
+        if (canMove)
+        {
+            transform.Translate(direction * Time.deltaTime * speed);
+        }
     }
 
     void BulletDirection()
     {
-        if (pm.GetFacing())
+        if (pm.Facing)
         {
             GetComponent<SpriteRenderer>().flipY = true;
             direction = Vector3.left;

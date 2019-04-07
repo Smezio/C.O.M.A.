@@ -5,11 +5,9 @@ using UnityEngine;
 public class Inline : BulletClass
 {
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         type = "Inline";
-        speed = 0.5f;
-        damage = 1;
         target = "Player";
         
         direction = Vector3.right;
@@ -18,6 +16,8 @@ public class Inline : BulletClass
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(direction.normalized * Time.deltaTime * speed);
+        CheckBounds();
+        if (canMove)
+            transform.Translate(direction.normalized * Time.deltaTime * speed);
     }
 }

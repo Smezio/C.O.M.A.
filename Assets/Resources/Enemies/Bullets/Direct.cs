@@ -8,8 +8,6 @@ public class Direct : BulletClass
     void Start()
     {
         type = "Direct";
-        speed = 0.7f;
-        damage = 1;
         target = "Player";
 
         BulletRotation();
@@ -19,7 +17,9 @@ public class Direct : BulletClass
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(direction * Time.deltaTime * speed);
+        CheckBounds();
+        if (canMove)
+            transform.Translate(direction * Time.deltaTime * speed);
     }
 
     protected void BulletRotation()
