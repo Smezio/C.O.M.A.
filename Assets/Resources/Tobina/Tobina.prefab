@@ -79,9 +79,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.05, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.9
 --- !u!1 &1867435539
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 3839174357448040398}
   - component: {fileID: 3839174357448040399}
   - component: {fileID: 3839174357448040373}
-  - component: {fileID: 3839174357448040370}
+  - component: {fileID: 2161538992011171002}
   - component: {fileID: 5879444300456208317}
   - component: {fileID: 6848862997753599346}
   m_Layer: 0
@@ -269,8 +269,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &3839174357448040370
-BoxCollider2D:
+--- !u!58 &2161538992011171002
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -282,19 +282,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0046164393, y: 0.009233147}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0.05, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.9878824, y: 0.997116}
-  m_EdgeRadius: 0
+  m_Radius: 0.6
 --- !u!82 &5879444300456208317
 AudioSource:
   m_ObjectHideFlags: 0
@@ -408,4 +398,5 @@ MonoBehaviour:
   speed: 30
   defaultBullet: {fileID: 6477088380431855885, guid: f573a81ea5e35204a98be59b975cb20a,
     type: 3}
-  cooldown: 1
+  cooldownShoot: 0.8
+  cooldownParry: 2

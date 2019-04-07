@@ -4,57 +4,33 @@ using UnityEngine;
 
 public class Parry : MonoBehaviour
 {
-    private CircleCollider2D parryCollider;
     private bool canParry;
+    private bool canShoot;
 
-    void Start()
+    private void Start()
     {
-        parryCollider = GetComponent<CircleCollider2D>();
+        canParry = GetComponentInParent<PlayerClass>().CanParry;
+        canShoot = GetComponentInParent<PlayerClass>().CanShoot;
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "EnemyBullet")
-    //        canParry = true;
-    //}
+    private void Update()
+    {
+        canParry = GetComponentInParent<PlayerClass>().CanParry;
+        canShoot = GetComponentInParent<PlayerClass>().CanShoot;
+    }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if ((canParry && !canShoot) &&
+                collision.gameObject.tag.Equals("Bullet") &&
+                collision.gameObject.GetComponent<BulletClass>().Target.Equals("Player"))
         {
-            transform.parent.GetComponent<Animator>().SetBool("ParryClick", true);
-
-            if (collision.gameObject.tag == "EnemyBullet")
-            {
-                Debug.Log("Parry!");
-                GameObject obj = collision.gameObject;
-                if (obj.GetComponent<Direct>() != null)
-                {
-                    Direct bullet = obj.GetComponent<Direct>();
-                    Vector2 direction = (obj.transform.position - transform.parent.position).normalized;
-                    bullet.SetDirection(direction);
-                    bullet.SetSpeed(1.5f);
-                }
-                else if (obj.GetComponent<Inline>() != null)
-                {
-                    Inline bullet = obj.GetComponent<Inline>();
-                    Vector2 direction = (obj.transform.position - transform.parent.position).normalized;
-                    bullet.SetDirection(direction);
-                    bullet.SetSpeed(1.5f);
-                }
-                else if (obj.GetComponent<Inline>() != null)
-                {
-                    AllDirections bullet = obj.GetComponent<AllDirections>();
-                    Vector2 direction = (obj.transform.position - transform.parent.position).normalized;
-                    bullet.SetDirection(direction);
-                    bullet.SetSpeed(1.5f);
-                }
-            }
+            BulletClass bullet = collision.gameObject.GetComponent<BulletClass>();
+            Vector2 direction = (collision.gameObject.transform.position - transform.parent.position).normalized;
+            bullet.Direction = direction;
+            bullet.Speed = 1.5f;
+            bullet.Target = "Enemy";
+            bullet.Damage = 2;
         }
     }
-
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    canParry = false;
-    //}
 }
