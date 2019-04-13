@@ -9,8 +9,8 @@ public class PlayerClass : MonoBehaviour
     public float maxhealthPoint = 4;
     private float healthPoint;
     private bool immune;
-    public float immuneDuration = 10; // sec
-    private float immuneTimer;
+    private float resetTimeImmune;
+    public float cooldownImmune;
     private int score;
 
     /* Movement properties */
@@ -44,7 +44,6 @@ public class PlayerClass : MonoBehaviour
     {
         healthPoint = maxhealthPoint;
         immune = true;
-        immuneTimer = immuneDuration;
         score = 0;
 
         canMove = true;
@@ -69,6 +68,7 @@ public class PlayerClass : MonoBehaviour
         Movement();
         Shoot();
         Parry();
+        CountImmuneTime();
         ScoreControl();
     }
 
@@ -101,6 +101,7 @@ public class PlayerClass : MonoBehaviour
         }
     }
     
+    /* Accesso e uscita dalla PauseMode */
     public void PauseOn()
     {
         canShoot = false;
@@ -147,36 +148,26 @@ public class PlayerClass : MonoBehaviour
             TakeDamage(1f);
     }
 
+    /* Calcolo dei punti vita e controllo della morte */
     public void TakeDamage(float damage)
     {
-        if (!immune)
-            healthPoint -= damage;
-
-        if (healthPoint <= 0)
-            GetComponent<Animator>().SetBool("Death", true);
-    }
-
-    /* Differenziare il tempo dell'immunità del danno con quello del power up */
-    public void ImmuneControl()
-    {
-        if (immune)
+        if (!immune && healthPoint > 0)
         {
-            immuneTimer -= Time.deltaTime;
-            if (immuneTimer <= 0)
-                immune = false;
+            healthPoint -= damage;
+            resetTimeImmune = Time.time + cooldownImmune;
+            immune = true;
+            GetComponent<Animator>().SetLayerWeight(1, 1);
         }
+        else if (healthPoint <= 0)
+            GetComponent<Animator>().SetBool("Death", true);
     }
 
     private void DestroyTobina()
     {
         GameObject.Destroy(this.gameObject);
     }
-
-    public float GetHealthPoint()
-    {
-        return healthPoint;
-    }
-
+    
+    /* Attiva lo sparo */
     private void Shoot()
     {
         if (canShoot)
@@ -199,13 +190,32 @@ public class PlayerClass : MonoBehaviour
             }
         }
     }
-    
+
+    /* Genera il proiettle */
+    private void InstantiateBullet()
+    {
+        if (nextFire)
+        {
+            // Spawn Bullet
+            var trans = facing ? leftBulletSpawn : rightBulletSpawn;
+            GameObject obj = Instantiate(defaultBullet, trans.position, trans.rotation);
+
+            // Flip bullet
+            obj.GetComponent<SpriteRenderer>().flipX = facing;
+
+            nextFire = false;
+
+            audioShoot.Play();
+        }
+    }
+
     private void DisableShootAnimation()
     {
         GetComponent<Animator>().SetBool("ShootClick", false);
         canParry = true;
     }
 
+    /* Attiva il parry */
     private void Parry()
     {
         if (canParry)
@@ -231,24 +241,17 @@ public class PlayerClass : MonoBehaviour
         GetComponent<Animator>().SetBool("ParryClick", false);
         canShoot = true;
     }
-
-    private void InstantiateBullet()
+    
+    private void CountImmuneTime()
     {
-        if (nextFire)
+        if (immune && (Time.time - (pauseFinish - pauseStart)) > resetTimeImmune)
         {
-            // Spawn Bullet
-            var trans = facing ? leftBulletSpawn : rightBulletSpawn;
-            GameObject obj = Instantiate(defaultBullet, trans.position, trans.rotation);
-
-            // Flip bullet
-            obj.GetComponent<SpriteRenderer>().flipX = facing;
-
-            nextFire = false;
-
-            audioShoot.Play();
+            immune = false;
+            GetComponent<Animator>().SetLayerWeight(1, 0);
         }
     }
- 
+
+    /* Confronta lo score del player con quello nella UI */
     private void ScoreControl()
     {
         if (!GameObject.Find("Score").GetComponent<Text>().text.Equals(score.ToString()))
@@ -269,6 +272,11 @@ public class PlayerClass : MonoBehaviour
     public bool CanParry
     {
         get { return canParry; }
+    }
+
+    public float HealthPoint
+    {
+        get { return healthPoint; }
     }
 
     public int Score

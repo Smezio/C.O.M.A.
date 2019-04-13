@@ -81,7 +81,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0.05, y: 0}
   serializedVersion: 2
-  m_Radius: 0.9
+  m_Radius: 1
 --- !u!1 &1867435539
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 3839174357448040373}
   - component: {fileID: 2161538992011171002}
   - component: {fileID: 5879444300456208317}
-  - component: {fileID: 6848862997753599346}
+  - component: {fileID: 3487459638371249932}
   m_Layer: 0
   m_Name: Tobina
   m_TagString: Player
@@ -284,7 +284,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0.05, y: 0}
   serializedVersion: 2
-  m_Radius: 0.6
+  m_Radius: 0.5
 --- !u!82 &5879444300456208317
 AudioSource:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6848862997753599346
+--- !u!114 &3487459638371249932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxhealthPoint: 4
-  immuneDuration: 10
+  cooldownImmune: 2
   speed: 30
   defaultBullet: {fileID: 6477088380431855885, guid: f573a81ea5e35204a98be59b975cb20a,
     type: 3}

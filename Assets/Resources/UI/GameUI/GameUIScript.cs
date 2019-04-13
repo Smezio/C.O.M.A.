@@ -20,9 +20,9 @@ public class GameUIScript : MonoBehaviour
 
     private void HealthUpdate ()
     {
-        if (player.GetHealthPoint() >= 0 && player.GetHealthPoint() < transform.GetChild(0).childCount)
+        if (player.HealthPoint >= 0 && player.HealthPoint < transform.GetChild(0).childCount)
         {
-            for (int i = transform.GetChild(0).childCount; i > player.GetHealthPoint(); i--)
+            for (int i = transform.GetChild(0).childCount; i > player.HealthPoint; i--)
                 transform.GetChild(0).GetChild(i - 1).gameObject.SetActive(false);
         }
     }
