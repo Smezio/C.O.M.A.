@@ -26,7 +26,7 @@ public class Parry : MonoBehaviour
                 collision.gameObject.GetComponent<BulletClass>().Target.Equals("Player"))
         {
             BulletClass bullet = collision.gameObject.GetComponent<BulletClass>();
-            Vector2 direction = (collision.gameObject.transform.position - transform.parent.position).normalized;
+            Vector2 direction = (bullet.Shooter.transform.position - bullet.transform.position).normalized;
             bullet.Direction = direction;
             bullet.Speed = 1.5f;
             bullet.Target = "Enemy";

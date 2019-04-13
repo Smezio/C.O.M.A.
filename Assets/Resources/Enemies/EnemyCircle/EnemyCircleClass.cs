@@ -107,7 +107,8 @@ public class EnemyCircleClass : EnemyClass
     {
         if (nextFire)
         {
-            Instantiate(Resources.Load("Enemies/Bullets/DirectBullet"), transform.GetChild(0).position, transform.GetChild(0).rotation);
+            GameObject bullet = Instantiate(Resources.Load("Enemies/Bullets/DirectBullet"), transform.GetChild(0).position, transform.GetChild(0).rotation) as GameObject;
+            bullet.GetComponent<BulletClass>().Shooter = gameObject;
             nextFire = false;
         }
     }

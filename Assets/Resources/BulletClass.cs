@@ -8,6 +8,7 @@ public class BulletClass : MonoBehaviour
     public float speed;
     public float damage;
     protected string target;
+    protected GameObject shooter;
     protected Vector3 direction;
 
     protected bool canMove;
@@ -16,6 +17,7 @@ public class BulletClass : MonoBehaviour
     void Awake()
     {
         canMove = true;
+
     }
 
     // Update is called once per frame
@@ -85,9 +87,15 @@ public class BulletClass : MonoBehaviour
         set { speed = value; }
     }
 
-    public Vector2 Direction
+    public Vector3 Direction
     {
         get { return direction; }
         set { direction = value; }
+    }
+
+    public GameObject Shooter
+    {
+        get { return shooter; }
+        set { shooter = value; }
     }
 }
