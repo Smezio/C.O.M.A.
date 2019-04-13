@@ -14,7 +14,6 @@ public class EnemyDashClass : EnemyClass
         enemyType = "Dash";
         bulletType = "Direct";
         immune = false;
-        score = 30;
 
         pos = transform.position;
     }
@@ -33,8 +32,9 @@ public class EnemyDashClass : EnemyClass
         {
             if (healthPoint > 0)
             {
-                pos.y = pos.y + amplitude * Mathf.Sin(t);
-                pos.x += speed * Time.deltaTime;
+                transform.parent.transform.Translate(Vector3.right * speed * Time.deltaTime);
+                pos.y = transform.parent.position.y + amplitude * Mathf.Sin(t);
+                pos.x = transform.parent.position.x;
                 t += Time.deltaTime * frequency;
                 transform.position = pos;
             }
@@ -48,6 +48,56 @@ public class EnemyDashClass : EnemyClass
                 GetComponent<SpriteRenderer>().flipX = false;
             }
         }
+    }
+
+    public void Facing(string spawnPoint)
+    {
+        float angle = 0f;
+        if (spawnPoint.Contains("R"))
+        {
+            if (spawnPoint.Substring(spawnPoint.Length - 1).Equals("1") || spawnPoint.Substring(spawnPoint.Length - 1).Equals("3"))
+                angle = Random.Range(200f, 160f);
+            else if (spawnPoint.Substring(spawnPoint.Length - 1).Equals("2"))
+                angle = Random.Range(210f, 150f);
+        }
+        else if (spawnPoint.Contains("L"))
+        {
+            if (spawnPoint.Substring(spawnPoint.Length - 1).Equals("1") || spawnPoint.Substring(spawnPoint.Length - 1).Equals("3"))
+                angle = Random.Range(20f, -20f);
+            else if (spawnPoint.Substring(spawnPoint.Length - 1).Equals("2"))
+                angle = Random.Range(30f, -30f);
+        }
+        else if (spawnPoint.Contains("U") || spawnPoint.Contains("D"))
+        {
+            switch (spawnPoint.Substring(spawnPoint.Length - 1))
+            {
+                case "1":
+                    angle = Random.Range(45f, 90f);
+                    break;
+
+                case "2":
+                    angle = Random.Range(45f, 120f);
+                    break;
+
+                case "3":
+                    angle = Random.Range(45f, 135f);
+                    break;
+
+                case "4":
+                    angle = Random.Range(60f, 135f);
+                    break;
+
+                case "5":
+                    angle = Random.Range(90f, 135f);
+                    break;
+            }
+
+            if (spawnPoint.Contains("U"))
+                angle = -angle;
+        }
+
+        transform.parent.Rotate(Vector3.forward, angle);
+        transform.Rotate(Vector3.forward, -angle);
     }
 
     protected void InstantiateBullet()

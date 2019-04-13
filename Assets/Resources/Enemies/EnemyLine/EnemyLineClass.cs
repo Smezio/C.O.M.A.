@@ -5,17 +5,12 @@ using UnityEngine;
 public class EnemyLineClass : EnemyClass
 {
 
-    Vector3 direction;
-
     void Start()
     {
         enemyType = "Inline";
         bulletType = "Inline";
         immune = false;
         score = 10;
-
-        direction = Facing();
-        
     }
 
     // Update is called once per frame
@@ -31,32 +26,57 @@ public class EnemyLineClass : EnemyClass
         if (canMove)
         {
             if (healthPoint > 0)
-                transform.Translate(direction.normalized * Time.deltaTime * speed);
-
-            if (GameObject.FindGameObjectWithTag("Player").transform.position.y > transform.position.y)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 90);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(0, 0, -90);
-            }
+                transform.parent.Translate(Vector3.right * Time.deltaTime * speed);
         }
     }
 
-    private Vector3 Facing()
+    public void Facing(string spawnPoint)
     {
-        Vector3 dir;
-        if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
+        if (spawnPoint.Contains("R"))
         {
-            dir = Vector3.up;
+            transform.parent.Rotate(Vector3.forward, 180f);
+            GetComponent<SpriteRenderer>().flipX = true;
+            GetComponent<SpriteRenderer>().flipY = true;
         }
-        else
+        else if (spawnPoint.Contains("L"))
         {
-            dir = Vector3.down;
+            transform.parent.Rotate(Vector3.forward, 0f);
+            transform.Rotate(Vector3.forward, 0f);
+            GetComponent<SpriteRenderer>().flipX = true;
         }
+        else if (spawnPoint.Contains("U"))
+        {
+            if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
+            {
+                transform.parent.Rotate(Vector3.forward, -90f);
+                transform.Rotate(Vector3.forward, 90f);
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                transform.parent.Rotate(Vector3.forward, -90f);
+                transform.Rotate(Vector3.forward, -90f);
+                GetComponent<SpriteRenderer>().flipX = true;
+                GetComponent<SpriteRenderer>().flipY = true;
+            }
 
-        return dir;
+        }
+        else if (spawnPoint.Contains("D"))
+        {
+            if (GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x)
+            {
+                transform.parent.Rotate(Vector3.forward, 90f);
+                transform.Rotate(Vector3.forward, -90f);
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                transform.parent.Rotate(Vector3.forward, 90f);
+                transform.Rotate(Vector3.forward, 90f);
+                GetComponent<SpriteRenderer>().flipX = true;
+                GetComponent<SpriteRenderer>().flipY = true;
+            }
+        }
     }
 
     protected void InstantiateBullet()

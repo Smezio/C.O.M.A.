@@ -4,6 +4,8 @@ using UnityEngine;
 public class SpawnPoint : MonoBehaviour
 {
     public GameObject[] enemies;
+    private GameObject enemy;
+    private int index;
 
     private int frameCount;
     private float timer;
@@ -23,6 +25,7 @@ public class SpawnPoint : MonoBehaviour
 
         frameCount++;
 
+        /* INTERMITTENZA DA SOSTITUIRE CON ANIMAZIONE */
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         if (frameCount % 15 == 0)
             renderer.enabled = !renderer.enabled;
@@ -32,9 +35,20 @@ public class SpawnPoint : MonoBehaviour
             gameObject.SetActive(false);
             frameCount = 0;
 
-            // TODO: INSTANTIATE ENEMY HERE!!!
-            int index = Random.Range(0, enemies.Length - 1);
-            Instantiate(enemies[index], transform.position, transform.rotation);
+            EnemySpawning();
         }
+    }
+
+    public void EnemySpawning()
+    {
+        index = Random.Range(0, enemies.Length - 1);
+        enemy = Instantiate(enemies[index], transform.position, transform.rotation);
+
+        if (enemy.name.Contains("Circle"))
+            enemy.GetComponentInChildren<EnemyCircleClass>().Facing(gameObject.name.Substring(gameObject.name.Length - 2));
+        else if (enemy.name.Contains("Line"))
+            enemy.GetComponentInChildren<EnemyLineClass>().Facing(gameObject.name.Substring(gameObject.name.Length - 2));
+        else if (enemy.name.Contains("Dash"))
+            enemy.GetComponentInChildren<EnemyDashClass>().Facing(gameObject.name.Substring(gameObject.name.Length - 2));
     }
 }

@@ -71,7 +71,7 @@ public class EnemyClass : MonoBehaviour
 
     protected void DestroyEnemy ()
     {
-        GameObject.Destroy(this.gameObject);
+        GameObject.Destroy(transform.parent.gameObject);
     }
 
     public void PauseOn()
@@ -94,10 +94,9 @@ public class EnemyClass : MonoBehaviour
     {
         var pos = transform.position;
         if (pos.x > 2.1f || pos.x< -2.1f || pos.y> 1.4f || pos.y< -1.4f)
-            GameObject.Destroy(gameObject);
+            GameObject.Destroy(transform.parent.gameObject);
     }
-
-
+    
     public int Score
     {
         get { return score; }
