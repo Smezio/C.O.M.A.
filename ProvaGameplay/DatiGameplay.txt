@@ -1,0 +1,67 @@
+number = num;
+        minSpawn = 0;
+        maxSpawn = 0;
+        cooldownSpawn = 0f;
+        enemyLineSpeed = 0f;
+        enemyLineCooldown = 0f;
+        enemyDashSpeed = 0f;
+        enemyDashFrequency = 0f;
+        enemyDashCooldown = 0f;
+        enemyCircleSpeed = 0f;
+        enemyCircleFrequency = 0f;
+        enemyCircleCooldown = 0f;
+        enemyChargeSpeed = 0f;
+       
+        switch (number)
+        {
+            case 1:
+                {
+                    minSpawn = 3;
+                    maxSpawn = 6;
+                    cooldownSpawn = 10f;
+                    enemyLineSpeed = 0.5f;
+                    enemyLineCooldown = 3f;
+                    enemyDashSpeed = 0.5f;
+                    enemyDashFrequency = 1f;
+                    enemyDashCooldown = 5f;
+                    enemyCircleSpeed = 0.5f;
+                    enemyCircleFrequency = 1f;
+                    enemyCircleCooldown = 5f;
+                    enemyChargeSpeed = 0.5f;
+                }
+                break;
+
+            case 2:
+                {
+                    minSpawn = 6;
+                    maxSpawn = 8;
+                    cooldownSpawn = 7f;
+                    enemyLineSpeed = 0.5f;
+                    enemyLineCooldown = 2f;
+                    enemyDashSpeed = 1f;
+                    enemyDashFrequency = 1.5f;
+                    enemyDashCooldown = 3f;
+                    enemyCircleSpeed = 1f;
+                    enemyCircleFrequency = 1.5f;
+                    enemyCircleCooldown = 3f;
+                    enemyChargeSpeed = 1f;
+                }
+                break;
+
+            case 3:
+                {
+                    minSpawn = 6;
+                    maxSpawn = 8;
+                    cooldownSpawn = 4f;
+                    enemyLineSpeed = 0.8f;
+                    enemyLineCooldown = 2f;
+                    enemyDashSpeed = 2f;
+                    enemyDashFrequency = 2f;
+                    enemyDashCooldown = 2f;
+                    enemyCircleSpeed = 2f;
+                    enemyCircleFrequency = 2f;
+                    enemyCircleCooldown = 2f;
+                    enemyChargeSpeed = 2f;
+                }
+                break;
+        }
