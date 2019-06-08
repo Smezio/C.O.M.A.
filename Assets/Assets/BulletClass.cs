@@ -29,7 +29,7 @@ public class BulletClass : MonoBehaviour
     {
         if (col.gameObject.tag.Equals(target))
         {
-            if (target.Equals("Enemy"))
+            if (target.Equals("Enemy") && !col.gameObject.name.Contains("Charge"))
             {
                 col.gameObject.GetComponent<EnemyClass>().TakeDamage(damage);
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerClass>().Score += col.gameObject.GetComponent<EnemyClass>().Score;

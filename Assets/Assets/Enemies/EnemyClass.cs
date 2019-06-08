@@ -17,8 +17,8 @@ public class EnemyClass : MonoBehaviour
     protected float resetTime;
     protected float cooldown;
 
-    private float pauseStart;
-    private float pauseFinish;
+    protected float pauseStart;
+    protected float pauseFinish;
 
     // Start is called before the first frame update
     void Awake()
@@ -66,7 +66,10 @@ public class EnemyClass : MonoBehaviour
             healthPoint -= damage;
 
         if (healthPoint <= 0)
+        {
+            GetComponent<BoxCollider2D>().enabled = false;
             GetComponent<Animator>().SetBool("Death", true);
+        }
     }
 
     protected void DestroyEnemy ()
@@ -74,7 +77,7 @@ public class EnemyClass : MonoBehaviour
         GameObject.Destroy(transform.parent.gameObject);
     }
 
-    public void PauseOn()
+    virtual public void PauseOn()
     {
         canShoot = false;
         canMove = false;
@@ -82,7 +85,7 @@ public class EnemyClass : MonoBehaviour
         GetComponent<Animator>().speed = 0f;
     }
 
-    public void PauseOff()
+    virtual public void PauseOff()
     {
         canShoot = true;
         canMove = true;

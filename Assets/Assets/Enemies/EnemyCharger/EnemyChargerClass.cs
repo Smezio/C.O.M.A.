@@ -11,7 +11,6 @@ public class EnemyChargerClass : EnemyClass
         enemyType = "Charger";
         bulletType = "Deflect";
         immune = true;
-        cooldown = 0.5f;
         score = 100;
         
         target = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
@@ -30,7 +29,7 @@ public class EnemyChargerClass : EnemyClass
         if (canMove)
         {
             if (healthPoint > 0)
-                transform.parent.transform.Translate(target * Time.deltaTime * speed);
+                transform.parent.Translate(target * Time.deltaTime * speed);
         }
     }
 

@@ -14,6 +14,7 @@ public class EnemyDashClass : EnemyClass
         enemyType = "Dash";
         bulletType = "Direct";
         immune = false;
+        score = 20;
 
         pos = transform.position;
     }
