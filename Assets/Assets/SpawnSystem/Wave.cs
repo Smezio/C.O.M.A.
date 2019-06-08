@@ -12,27 +12,27 @@ public class Wave : MonoBehaviour
     private SceneControlScript levelControl;
     private int minEnemies;
     private int maxEnemies;
+    private int minSpawnIndex;
+    private int maxSpawnIndex;
 
     private float pauseStart;
     private float pauseFinish;
     
     private GameObject[] spawnPoints;
+    private List<int> indexList;
 
     // Start is called before the first frame update
     void Start()
     {
-        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-        for (uint i = 0; i < spawnPoints.Length; i++)
-        {
-            spawnPoints[i].SetActive(false);
-        }
         levelControl = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SceneControlScript>();
 
         canSpawn = true;
         cooldown = levelControl.CurrentLevel.CooldownSpawn;
         resetWave = cooldown;
         counter = 0;
-        
+
+        indexList = new List<int>();
+
         minEnemies = levelControl.CurrentLevel.MinSpawn;
         maxEnemies = levelControl.CurrentLevel.MaxSpawn;
 
@@ -51,8 +51,7 @@ public class Wave : MonoBehaviour
                 pauseFinish = 0;
 
                 counter++;
-                Debug.Log(counter + " spawn");
-                if (levelControl.CurrentLevel.Number == 1 && counter == 3)
+                if (levelControl.CurrentLevel.Number == 1 && counter == 2)
                 {
                     levelControl.CurrentLevel = new Level(2);
                     cooldown = levelControl.CurrentLevel.CooldownSpawn;
@@ -63,7 +62,7 @@ public class Wave : MonoBehaviour
                     /* Modificare */
                     GameObject.FindWithTag("GameController").GetComponent<Text>().text = "Level 2";
                 }
-                else if (levelControl.CurrentLevel.Number == 2 && counter == 3)
+                else if (levelControl.CurrentLevel.Number == 2 && counter == 2)
                 {
                     levelControl.CurrentLevel = new Level(3);
                     cooldown = levelControl.CurrentLevel.CooldownSpawn;
@@ -74,6 +73,24 @@ public class Wave : MonoBehaviour
                     /* Modificare */
                     GameObject.FindWithTag("GameController").GetComponent<Text>().text = "Level 3";
                 }
+                else if (levelControl.CurrentLevel.Number == 3 && counter == 2)
+                {
+                    levelControl.CurrentLevel = new Level(4);
+                    cooldown = levelControl.CurrentLevel.CooldownSpawn;
+                    minEnemies = levelControl.CurrentLevel.MinSpawn;
+                    maxEnemies = levelControl.CurrentLevel.MaxSpawn;
+                    counter = 0;
+
+                    GameObject boss = Instantiate(Resources.Load("Enemies/Boss")) as GameObject;
+                    boss.GetComponentInChildren<BossClass>().Frequency = levelControl.CurrentLevel.EnemyBossFrequency;
+                    boss.GetComponentInChildren<BossClass>().Cooldown = levelControl.CurrentLevel.EnemyBossCooldown;
+                    boss.GetComponentInChildren<BossClass>().RushCooldown = levelControl.CurrentLevel.EnemyBossRushCooldown;
+                    boss.GetComponentInChildren<BossClass>().RushFrequency = levelControl.CurrentLevel.EnemyBossRushFrequency;
+                    boss.GetComponentInChildren<BossClass>().RushSpeed = levelControl.CurrentLevel.EnemyBossRushSpeed;
+
+                    /* Modificare */
+                    GameObject.FindWithTag("GameController").GetComponent<Text>().text = "Level 4";
+                }
 
                 SpawnWave();
                 resetWave = Time.time + cooldown;
@@ -83,15 +100,38 @@ public class Wave : MonoBehaviour
 
     private void SpawnWave()
     {
+        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+
+        if (GameObject.Find("Boss") != null)
+        {
+            if (GameObject.Find("Boss").GetComponentInChildren<BossClass>().IsRight &&
+                !GameObject.Find("Boss").GetComponentInChildren<BossClass>().IsLeft)
+            {
+                minSpawnIndex = 0;
+                maxSpawnIndex = spawnPoints.Length - 3;
+            }
+            else if (GameObject.Find("Boss").GetComponentInChildren<BossClass>().IsLeft &&
+                !GameObject.Find("Boss").GetComponentInChildren<BossClass>().IsRight)
+            {
+                minSpawnIndex = 3;
+                maxSpawnIndex = spawnPoints.Length;
+            }
+        }
+        else
+        {
+            minSpawnIndex = 0;
+            maxSpawnIndex = spawnPoints.Length;
+        }
+
         int numEnemies = Random.Range(minEnemies, maxEnemies);
-        List<int> indexList = new List<int>();
+        indexList = new List<int>();
         for (int i = 0; i < numEnemies; i++)
         {
             // Random index without repeating
             int indexEnemy;
             do
             {
-                indexEnemy = Random.Range(0, spawnPoints.Length);
+                indexEnemy = Random.Range(minSpawnIndex, maxSpawnIndex);
             }
             while (indexList.Contains(indexEnemy));
             indexList.Add(indexEnemy);

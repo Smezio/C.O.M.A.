@@ -7,8 +7,9 @@ public class SceneControlScript : MonoBehaviour
 {
     Transform pauseMenu;
     private bool inPause;
-    private PlayerClass player;
+    private GameObject player;
     private GameObject[] enemies;
+    private GameObject boss;
     private GameObject[] bullets;
     private GameObject[] playerBullets;
     private Wave wave;
@@ -20,9 +21,8 @@ public class SceneControlScript : MonoBehaviour
     {
         inPause = false;
         pauseMenu = GameObject.Find("PauseMenu").transform;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerClass>();
+        player = GameObject.FindGameObjectWithTag("Player");
         wave = GameObject.Find("Wave").GetComponent<Wave>();
-
         currentLevel = new Level(1);
     }
 
@@ -39,6 +39,11 @@ public class SceneControlScript : MonoBehaviour
             enemies = GameObject.FindGameObjectsWithTag("Enemy");
             bullets = GameObject.FindGameObjectsWithTag("Bullet");
 
+            if (GameObject.Find("Boss") != null)
+                boss = GameObject.Find("Boss").transform.GetChild(0).gameObject;
+            else
+                boss = null;
+
             if (!inPause)
             {
                 inPause = true;
@@ -49,7 +54,9 @@ public class SceneControlScript : MonoBehaviour
                     enemies[i].GetComponent<EnemyClass>().PauseOn();
                 for (int i = 0; i < bullets.Length; i++)
                     bullets[i].GetComponent<BulletClass>().PauseOn();
-                player.PauseOn();
+                player.GetComponent<PlayerClass>().PauseOn();
+                if (boss != null)
+                    boss.GetComponent<BossClass>().PauseOn();
                 wave.PauseOn();
             }
             else
@@ -67,7 +74,9 @@ public class SceneControlScript : MonoBehaviour
             enemies[i].GetComponent<EnemyClass>().PauseOff();
         for (int i = 0; i < bullets.Length; i++)
             bullets[i].GetComponent<BulletClass>().PauseOff();
-        player.PauseOff();
+        player.GetComponent<PlayerClass>().PauseOff();
+        if (boss != null)
+            boss.GetComponent<BossClass>().PauseOff();
         wave.PauseOff();
     }
 
@@ -114,7 +123,14 @@ public struct Level
 
     float enemyChargeSpeed;
 
-    
+    bool enemyBossSpawn;
+    float enemyBossFrequency;
+    float enemyBossCooldown;
+    float enemyBossRushSpeed;
+    float enemyBossRushFrequency;
+    float enemyBossRushCooldown;
+
+
     public Level (int num)
     {
         number = num;
@@ -130,7 +146,13 @@ public struct Level
         enemyCircleFrequency = 0f;
         enemyCircleCooldown = 0f;
         enemyChargeSpeed = 0f;
-       
+        enemyBossSpawn = false;
+        enemyBossFrequency = 0f;
+        enemyBossCooldown = 0f;
+        enemyBossRushSpeed = 0f;
+        enemyBossRushFrequency = 0f;
+        enemyBossRushCooldown = 0f;
+
         switch (number)
         {
             case 1:
@@ -183,6 +205,29 @@ public struct Level
                     enemyChargeSpeed = 2f;
                 }
                 break;
+
+            case 4:
+                {
+                    minSpawn = 6;
+                    maxSpawn = 8;
+                    cooldownSpawn = 7f;
+                    enemyLineSpeed = 0.5f;
+                    enemyLineCooldown = 2f;
+                    enemyDashSpeed = 1f;
+                    enemyDashFrequency = 1.5f;
+                    enemyDashCooldown = 3f;
+                    enemyCircleSpeed = 1f;
+                    enemyCircleFrequency = 1.5f;
+                    enemyCircleCooldown = 3f;
+                    enemyChargeSpeed = 1f;
+                    enemyBossSpawn = true;
+                    enemyBossFrequency = 0.8f;
+                    enemyBossCooldown = 4f;
+                    enemyBossRushSpeed = 1.5f;
+                    enemyBossRushFrequency = 3f;
+                    enemyBossRushCooldown = 5f;
+                }
+                break;
         }
     }
 
@@ -199,4 +244,10 @@ public struct Level
     public float EnemyCircleFrequency { get => enemyCircleFrequency; }
     public float EnemyCircleCooldown { get => enemyCircleCooldown; }
     public float EnemyChargeSpeed { get => enemyChargeSpeed; }
+    public bool EnemyBossSpawn { get => enemyBossSpawn; }
+    public float EnemyBossFrequency { get => enemyBossFrequency; }
+    public float EnemyBossCooldown { get => enemyBossCooldown; }
+    public float EnemyBossRushSpeed { get => enemyBossRushSpeed; }
+    public float EnemyBossRushFrequency { get => enemyBossRushFrequency; }
+    public float EnemyBossRushCooldown { get => enemyBossRushCooldown; }
 }
