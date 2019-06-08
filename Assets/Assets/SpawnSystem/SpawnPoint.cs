@@ -22,8 +22,8 @@ public class SpawnPoint : MonoBehaviour
 
     public void EnemySpawning()
     {
-        gameObject.SetActive(false);
-
+        GetComponent<Animator>().enabled = false;
+        GetComponent<SpriteRenderer>().sprite = null;
         index = Random.Range(0, enemies.Length);
         enemy = Instantiate(enemies[index], transform.position, transform.rotation);
 

@@ -138,7 +138,7 @@ public class Wave : MonoBehaviour
 
             // Activate points
             for (int j = 0; j < indexList.Count; j++)
-                spawnPoints[indexList[j]].SetActive(true);
+                spawnPoints[indexList[j]].GetComponent<Animator>().enabled = true;
         }
     }
 
@@ -147,8 +147,8 @@ public class Wave : MonoBehaviour
         canSpawn = false;
         pauseStart = Time.time;
 
-        for (int i = 0; i < spawnPoints.Length; i++)
-            spawnPoints[i].GetComponent<Animator>().enabled = false;
+        for (int i = 0; i < indexList.Count; i++)
+            spawnPoints[indexList[i]].GetComponent<Animator>().speed = 0f;
     }
 
     public void PauseOff()
@@ -156,8 +156,8 @@ public class Wave : MonoBehaviour
         canSpawn = true;
         pauseFinish = Time.time;
 
-        for (int i = 0; i < spawnPoints.Length; i++)
-            spawnPoints[i].GetComponent<Animator>().enabled = true;
+        for (int i = 0; i < indexList.Count; i++)
+            spawnPoints[indexList[i]].GetComponent<Animator>().speed = 1f;
     }
 
     public bool CanSpawn

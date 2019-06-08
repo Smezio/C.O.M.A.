@@ -108,7 +108,7 @@ public class PlayerClass : MonoBehaviour
         canMove = false;
         canParry = false;
         pauseStart = Time.time;
-        GetComponent<Animator>().enabled = false;
+        GetComponent<Animator>().speed = 0f;
     }
 
     public void PauseOff()
@@ -117,7 +117,7 @@ public class PlayerClass : MonoBehaviour
         canMove = true;
         canParry = true;
         pauseFinish = Time.time;
-        GetComponent<Animator>().enabled = true;
+        GetComponent<Animator>().speed = 1f;
     }
 
     /* Collisioni power up */

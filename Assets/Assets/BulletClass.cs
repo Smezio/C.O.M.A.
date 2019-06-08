@@ -46,13 +46,13 @@ public class BulletClass : MonoBehaviour
     public void PauseOn()
     {
         canMove = false;
-        GetComponent<Animator>().enabled = false;
+        GetComponent<Animator>().speed = 0f;
     }
 
     public void PauseOff()
     {
         canMove = true;
-        GetComponent<Animator>().enabled = true;
+        GetComponent<Animator>().speed = 1f;
     }
 
     protected void CheckBounds()
