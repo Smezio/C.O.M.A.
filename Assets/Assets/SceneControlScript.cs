@@ -13,6 +13,7 @@ public class SceneControlScript : MonoBehaviour
     private GameObject[] bullets;
     private GameObject[] playerBullets;
     private Wave wave;
+    private BackgroundMovement[] background;
 
     private Level currentLevel;
 
@@ -23,6 +24,7 @@ public class SceneControlScript : MonoBehaviour
         pauseMenu = GameObject.Find("PauseMenu").transform;
         player = GameObject.FindGameObjectWithTag("Player");
         wave = GameObject.Find("Wave").GetComponent<Wave>();
+        background = GameObject.Find("Backgrounds").GetComponentsInChildren<BackgroundMovement>();
         currentLevel = new Level(1);
     }
 
@@ -58,6 +60,8 @@ public class SceneControlScript : MonoBehaviour
                 if (boss != null)
                     boss.GetComponent<BossClass>().PauseOn();
                 wave.PauseOn();
+                for (int i = 0; i < background.Length; i++)
+                    background[i].PauseOn();
             }
             else
                 Resume();
@@ -78,6 +82,8 @@ public class SceneControlScript : MonoBehaviour
         if (boss != null)
             boss.GetComponent<BossClass>().PauseOff();
         wave.PauseOff();
+        for (int i = 0; i < background.Length; i++)
+            background[i].PauseOff();
     }
 
     public void Rematch()
