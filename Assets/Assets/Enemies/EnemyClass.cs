@@ -20,6 +20,9 @@ public class EnemyClass : MonoBehaviour
     protected float pauseStart;
     protected float pauseFinish;
 
+    protected Vector3 screenDimension;
+    public AudioClip deathEnemyAudio;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -28,29 +31,31 @@ public class EnemyClass : MonoBehaviour
 
         pauseStart = 0;
         pauseFinish = 0;
+
+        screenDimension = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     protected void Shoot ()
     {
         if (canShoot)
         {
-            if ((Time.time - (pauseFinish - pauseStart)) > resetTime)
+            if ((Time.timeSinceLevelLoad - (pauseFinish - pauseStart)) > resetTime)
                 nextFire = true;
 
-            if (nextFire && (Time.time - (pauseFinish - pauseStart)) > resetTime)
+            if (nextFire && (Time.timeSinceLevelLoad - (pauseFinish - pauseStart)) > resetTime)
             {
                 pauseStart = 0;
                 pauseFinish = 0;
 
                 GetComponent<Animator>().SetBool("ShootClick", true);
 
-                resetTime = Time.time + cooldown;
+                resetTime = Time.timeSinceLevelLoad + cooldown;
             }
         }
     }
@@ -67,6 +72,7 @@ public class EnemyClass : MonoBehaviour
 
         if (healthPoint <= 0)
         {
+            canShoot = false;
             GetComponent<BoxCollider2D>().enabled = false;
 
             if (transform.name.Equals("BossCore"))
@@ -98,7 +104,7 @@ public class EnemyClass : MonoBehaviour
     {
         canShoot = false;
         canMove = false;
-        pauseStart = Time.time;
+        pauseStart = Time.timeSinceLevelLoad;
         GetComponent<Animator>().speed = 0f;
     }
 
@@ -106,14 +112,24 @@ public class EnemyClass : MonoBehaviour
     {
         canShoot = true;
         canMove = true;
-        pauseFinish = Time.time;
+        pauseFinish = Time.timeSinceLevelLoad;
         GetComponent<Animator>().speed = 1f;
     }
 
     protected void CheckBounds()
     {
-        var pos = transform.position;
-        if (pos.x > 2.1f || pos.x< -2.1f || pos.y> 1.4f || pos.y< -1.4f)
+        if (transform.parent.position.x >= screenDimension.x ||
+            transform.parent.position.x <= -screenDimension.x ||
+            transform.parent.position.y >= screenDimension.y ||
+            transform.parent.position.y <= -screenDimension.y)
+            canShoot = false;
+        else
+            canShoot = true;
+        
+        if (transform.parent.position.x > 2.1f || 
+            transform.parent.position.x< -2.1f || 
+            transform.parent.position.y> 1.4f || 
+            transform.parent.position.y< -1.4f)
             GameObject.Destroy(transform.parent.gameObject);
     }
     
