@@ -9,9 +9,9 @@ public class Direct : BulletClass
     {
         type = "Direct";
         target = "Player";
-
+        
         BulletRotation();
-        direction = ((GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized);
+        direction = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
     }
 
     // Update is called once per frame
@@ -19,18 +19,13 @@ public class Direct : BulletClass
     {
         CheckBounds();
         if (canMove)
-            transform.Translate(direction * Time.deltaTime * speed);
+            transform.Translate(direction * Time.deltaTime * speed, Space.World);
     }
 
     protected void BulletRotation()
     {
-        if ((GameObject.FindGameObjectWithTag("Player").transform.position.x > transform.position.x))
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
-        }
+        Vector3 difference = GameObject.FindWithTag("Player").transform.position - transform.position;
+        float rotationZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, rotationZ);
     }
 }

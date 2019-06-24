@@ -9,8 +9,6 @@ public class Inline : BulletClass
     {
         type = "Inline";
         target = "Player";
-        
-        direction = (Vector2.right).normalized;
     }
 
     // Update is called once per frame
@@ -18,6 +16,6 @@ public class Inline : BulletClass
     {
         CheckBounds();
         if (canMove)
-            transform.Translate(direction * Time.deltaTime * speed);
+            transform.Translate(Vector2.right * Time.deltaTime * speed);
     }
 }
