@@ -68,7 +68,24 @@ public class EnemyClass : MonoBehaviour
         if (healthPoint <= 0)
         {
             GetComponent<BoxCollider2D>().enabled = false;
-            GetComponent<Animator>().SetBool("Death", true);
+
+            if (transform.name.Equals("BossCore"))
+            {
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+                GameObject.Find("Wave").SetActive(false);
+
+                for (int i = 0; i < enemies.Length; i++)
+                    enemies[i].GetComponent<Animator>().SetBool("Death", true);
+                for (int i = 0; i < bullets.Length; i++)
+                    Destroy(bullets[i]);
+                GetComponent<Animator>().SetBool("Death", true);
+            }
+            else
+            {
+                GetComponent<Animator>().SetBool("Death", true);
+                GetComponent<AudioSource>().PlayOneShot(deathEnemyAudio, 0.5f);
+            }
         }
     }
 

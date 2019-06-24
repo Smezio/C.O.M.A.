@@ -11,10 +11,10 @@ public class BossClass : EnemyClass
     bool canRush;
     Vector3 leftStartPosition;
     Vector3 rightStartPosition;
+    
 
     float rushCooldown;
     float resetTimeRush;
-    Vector3 screenDimension;
 
     private Vector3 pos;
     private float t;
@@ -23,9 +23,14 @@ public class BossClass : EnemyClass
 
     private float rushSpeed;
     private float rushFrequency;
+    private float rushAmplitude;
 
     private float pauseStartRush;
     private float pauseFinishRush;
+
+    public AudioClip shootAudio;
+    public AudioClip laughtAudio;
+    public AudioClip deathAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +40,7 @@ public class BossClass : EnemyClass
         immune = false;
         score = 100;
         cooldown = 4;
-
-        canMove = true;
+        
         canShoot = false;
         isLeft = false;
         isRight = true;
@@ -44,14 +48,10 @@ public class BossClass : EnemyClass
         direction = Vector3.zero;
 
         rushCooldown = 5f;
-        resetTimeRush = Time.time + rushCooldown;
+        resetTimeRush = Time.timeSinceLevelLoad + rushCooldown;
         pauseStartRush = 0;
         pauseFinishRush = 0;
 
-        frequency = 0.8f;
-        amplitude = 0.5f;
-
-        screenDimension = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
         leftStartPosition = new Vector3(-screenDimension.x - 0.5f, 0, -1.2f);
         rightStartPosition = new Vector3(screenDimension.x + 0.5f, 0, -1.2f);
 
@@ -64,8 +64,6 @@ public class BossClass : EnemyClass
         Movement();
         Entrance();
         //Rush();
-
-        Debug.Log(canMove);
 
         if (canShoot)
             Shoot();
@@ -121,11 +119,12 @@ public class BossClass : EnemyClass
                 }
             }
 
-            resetTimeRush = Time.time + rushCooldown;
+            resetTimeRush = Time.timeSinceLevelLoad + rushCooldown;
+            immune = false;
         }
     }
 
-
+    /*
     protected void Rush ()
     {
         
@@ -162,7 +161,7 @@ public class BossClass : EnemyClass
                 Entrance();
             }
         }
-    }
+    }*/
 
     protected void Movement ()
     {
@@ -179,7 +178,7 @@ public class BossClass : EnemyClass
                     t += Time.deltaTime * frequency;
                     transform.position = pos;
 
-                    if ((Time.time - (pauseFinishRush - pauseStartRush)) > resetTimeRush)
+                    if ((Time.timeSinceLevelLoad - (pauseFinishRush - pauseStartRush)) > resetTimeRush)
                     {
                         pauseStartRush = 0;
                         pauseFinishRush = 0;
@@ -194,13 +193,12 @@ public class BossClass : EnemyClass
                     GetComponent<Animator>().SetBool("RushClick", true);
                     canShoot = false;
                     immune = true;
-
                     transform.parent.transform.Translate(Vector3.left * rushSpeed * Time.deltaTime);
-                    pos.y = transform.parent.position.y + 0.5f * Mathf.Sin(t);
+                    pos.y = transform.parent.position.y + rushAmplitude * Mathf.Sin(t);
                     pos.x = transform.position.x;
                     t += Time.deltaTime * rushFrequency;
                     transform.position = pos;
-
+                    
                     if (transform.parent.position.x > rightStartPosition.x || transform.parent.position.x < leftStartPosition.x)
                     {
                         isLeft = !isLeft;
@@ -216,6 +214,11 @@ public class BossClass : EnemyClass
         }
     }
 
+    protected void GameFinish()
+    {
+        Camera.main.GetComponent<SceneControlScript>().GameVictoryMode();
+    }
+
     protected void InstantiateBullet()
     {
         if (nextFire)
@@ -226,13 +229,27 @@ public class BossClass : EnemyClass
         }
     }
 
+    protected void AudioManager()
+    {
+        if (GetComponent<Animator>().GetBool("ShootClick"))
+            GetComponent<AudioSource>().PlayOneShot(shootAudio, 0.7f);
+        else if (GetComponent<Animator>().GetBool("RushClick"))
+        {
+            GetComponent<AudioSource>().PlayOneShot(laughtAudio, 0.7f);
+            Debug.Log("CIAONE");
+        }
+
+        else if (GetComponent<Animator>().GetBool("Death"))
+            GetComponent<AudioSource>().PlayOneShot(deathAudio, 0.7f);
+    }
+
     override public void PauseOn()
     {
         canShoot = false;
         canMove = false;
         isEntrer = !isEntrer;
-        pauseStart = Time.time;
-        pauseStartRush = Time.time;
+        pauseStart = Time.timeSinceLevelLoad;
+        pauseStartRush = Time.timeSinceLevelLoad;
         GetComponent<Animator>().speed = 0f;
     }
 
@@ -241,8 +258,8 @@ public class BossClass : EnemyClass
         canShoot = true;
         canMove = true;
         isEntrer = !isEntrer;
-        pauseFinish = Time.time;
-        pauseFinishRush = Time.time;
+        pauseFinish = Time.timeSinceLevelLoad;
+        pauseFinishRush = Time.timeSinceLevelLoad;
         GetComponent<Animator>().speed = 1f;
     }
 
@@ -255,7 +272,9 @@ public class BossClass : EnemyClass
         get { return isRight; }
     }
     public float Frequency { get => frequency; set => frequency = value; }
+    public float Amplitude { get => amplitude; set => amplitude = value; }
     public float RushFrequency { get => rushFrequency; set => rushFrequency = value; }
+    public float RushAmplitude { get => rushAmplitude; set => rushAmplitude = value; }
     public float RushSpeed { get => rushSpeed; set => rushSpeed = value; }
     public float RushCooldown { get => rushCooldown; set => rushCooldown = value; }
 }
