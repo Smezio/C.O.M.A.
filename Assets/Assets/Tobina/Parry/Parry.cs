@@ -26,8 +26,16 @@ public class Parry : MonoBehaviour
                 collision.gameObject.GetComponent<BulletClass>().Target.Equals("Player"))
         {
             BulletClass bullet = collision.gameObject.GetComponent<BulletClass>();
-            Vector2 direction = (bullet.Shooter.transform.position - bullet.transform.position).normalized;
-            bullet.Direction = direction;
+            Vector2 direction = (((Vector2)bullet.transform.position + Vector2.one) - (Vector2)bullet.transform.position).normalized;
+
+            if (bullet.Shooter != null)
+                direction = bullet.Shooter.transform.position - bullet.transform.position;
+            bullet.Direction = direction.normalized;
+
+            Vector3 difference = transform.parent.position - transform.position;
+            float rotationZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            bullet.transform.rotation = Quaternion.Euler(bullet.transform.rotation.x, bullet.transform.rotation.y, rotationZ);
+
             bullet.Speed = 1.5f;
             bullet.Target = "Enemy";
             bullet.Damage = 2;

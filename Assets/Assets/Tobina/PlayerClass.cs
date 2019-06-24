@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class PlayerClass : MonoBehaviour
 {
     /* Status properties */
-    public float maxhealthPoint = 10;
     private float healthPoint;
     private bool immune;
     private float resetTimeImmune;
@@ -30,7 +29,6 @@ public class PlayerClass : MonoBehaviour
     private bool nextFire;
     private float resetTimeShoot;
     public float cooldownShoot;
-    private AudioSource audioShoot;
 
     /* Parry properties */
     private bool canParry;
@@ -40,9 +38,13 @@ public class PlayerClass : MonoBehaviour
     private float pauseStart;
     private float pauseFinish;
 
+    public AudioClip damageAudio;
+    public AudioClip shootAudio;
+    public AudioClip parryAudio;
+
     void Start()
     {
-        healthPoint = maxhealthPoint;
+        healthPoint = 4;
         immune = true;
         score = 0;
 
@@ -55,7 +57,6 @@ public class PlayerClass : MonoBehaviour
         canShoot = true;
         rightBulletSpawn = transform.GetChild(0);
         leftBulletSpawn = transform.GetChild(1);
-        audioShoot = GetComponent<AudioSource>();
 
         canParry = true;
 
@@ -107,7 +108,7 @@ public class PlayerClass : MonoBehaviour
         canShoot = false;
         canMove = false;
         canParry = false;
-        pauseStart = Time.time;
+        pauseStart = Time.timeSinceLevelLoad;
         GetComponent<Animator>().speed = 0f;
     }
 
@@ -116,7 +117,7 @@ public class PlayerClass : MonoBehaviour
         canShoot = true;
         canMove = true;
         canParry = true;
-        pauseFinish = Time.time;
+        pauseFinish = Time.timeSinceLevelLoad;
         GetComponent<Animator>().speed = 1f;
     }
 
@@ -154,16 +155,19 @@ public class PlayerClass : MonoBehaviour
         if (!immune && healthPoint > 0)
         {
             healthPoint -= damage;
-            resetTimeImmune = Time.time + cooldownImmune;
+            resetTimeImmune = Time.timeSinceLevelLoad + cooldownImmune;
             immune = true;
+            GetComponent<AudioSource>().PlayOneShot(damageAudio, 0.7f);
             GetComponent<Animator>().SetLayerWeight(1, 1);
         }
-        else if (healthPoint <= 0)
+
+        if (healthPoint <= 0)
             GetComponent<Animator>().SetBool("Death", true);
     }
 
     private void DestroyTobina()
     {
+        Camera.main.GetComponent<SceneControlScript>().GameOverMode();
         GameObject.Destroy(this.gameObject);
     }
     
@@ -174,10 +178,10 @@ public class PlayerClass : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if ((Time.time - (pauseFinish - pauseStart)) > resetTimeShoot)
+                if ((Time.timeSinceLevelLoad - (pauseFinish - pauseStart)) > resetTimeShoot)
                     nextFire = true;
 
-                if (nextFire && (Time.time - (pauseFinish - pauseStart)) > resetTimeShoot)
+                if (nextFire && (Time.timeSinceLevelLoad - (pauseFinish - pauseStart)) > resetTimeShoot)
                 {
                     canParry = false;
                     pauseStart = 0;
@@ -185,7 +189,7 @@ public class PlayerClass : MonoBehaviour
 
                     GetComponent<Animator>().SetBool("ShootClick", true);
 
-                    resetTimeShoot = Time.time + cooldownShoot;
+                    resetTimeShoot = Time.timeSinceLevelLoad + cooldownShoot;
                 }
             }
         }
@@ -205,7 +209,7 @@ public class PlayerClass : MonoBehaviour
 
             nextFire = false;
 
-            audioShoot.Play();
+            GetComponent<AudioSource>().PlayOneShot(shootAudio, 0.7f);
         }
     }
 
@@ -222,15 +226,16 @@ public class PlayerClass : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if ((Time.time - (pauseFinish - pauseStart)) > resetTimeParry)
+                if ((Time.timeSinceLevelLoad - (pauseFinish - pauseStart)) > resetTimeParry)
                 {
                     canShoot = false;
                     pauseStart = 0;
                     pauseFinish = 0;
 
                     GetComponent<Animator>().SetBool("ParryClick", true);
+                    GetComponent<AudioSource>().PlayOneShot(parryAudio, 0.7f);
 
-                    resetTimeParry = Time.time + cooldownParry;
+                    resetTimeParry = Time.timeSinceLevelLoad + cooldownParry;
                 }
             }
         }
@@ -241,10 +246,10 @@ public class PlayerClass : MonoBehaviour
         GetComponent<Animator>().SetBool("ParryClick", false);
         canShoot = true;
     }
-    
+
     private void CountImmuneTime()
     {
-        if (immune && (Time.time - (pauseFinish - pauseStart)) > resetTimeImmune)
+        if (immune && (Time.timeSinceLevelLoad - (pauseFinish - pauseStart)) > resetTimeImmune)
         {
             immune = false;
             GetComponent<Animator>().SetLayerWeight(1, 0);
