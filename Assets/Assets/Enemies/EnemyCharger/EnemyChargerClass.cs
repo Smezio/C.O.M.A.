@@ -15,6 +15,8 @@ public class EnemyChargerClass : EnemyClass
         
         target = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
         Direction();
+
+        speed = 1f;
     }
 
     // Update is called once per frame

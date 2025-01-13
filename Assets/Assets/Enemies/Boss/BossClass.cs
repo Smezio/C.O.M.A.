@@ -40,6 +40,7 @@ public class BossClass : EnemyClass
         immune = false;
         score = 100;
         cooldown = 4;
+        healthPoint = 10;
         
         canShoot = false;
         isLeft = false;
@@ -193,6 +194,7 @@ public class BossClass : EnemyClass
                     GetComponent<Animator>().SetBool("RushClick", true);
                     canShoot = false;
                     immune = true;
+                    Debug.Log("BELLA");
                     transform.parent.transform.Translate(Vector3.left * rushSpeed * Time.deltaTime);
                     pos.y = transform.parent.position.y + rushAmplitude * Mathf.Sin(t);
                     pos.x = transform.position.x;

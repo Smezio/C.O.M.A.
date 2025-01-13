@@ -45,35 +45,33 @@ public class Wave : MonoBehaviour
     {
         if (canSpawn)
         {
-            if (Time.time - (pauseFinish - pauseStart) > resetWave)
+            if (Time.timeSinceLevelLoad - (pauseFinish - pauseStart) > resetWave)
             {
                 pauseStart = 0;
                 pauseFinish = 0;
 
                 counter++;
-                if (levelControl.CurrentLevel.Number == 1 && counter == 2)
+                if (levelControl.CurrentLevel.Number+1 == 2 && counter == 3)
                 {
                     levelControl.CurrentLevel = new Level(2);
                     cooldown = levelControl.CurrentLevel.CooldownSpawn;
                     minEnemies = levelControl.CurrentLevel.MinSpawn;
                     maxEnemies = levelControl.CurrentLevel.MaxSpawn;
                     counter = 0;
-
-                    /* Modificare */
+                    
                     GameObject.FindWithTag("GameController").GetComponent<Text>().text = "Level 2";
                 }
-                else if (levelControl.CurrentLevel.Number == 2 && counter == 2)
+                else if (levelControl.CurrentLevel.Number+1 == 3 && counter == 4)
                 {
                     levelControl.CurrentLevel = new Level(3);
                     cooldown = levelControl.CurrentLevel.CooldownSpawn;
                     minEnemies = levelControl.CurrentLevel.MinSpawn;
                     maxEnemies = levelControl.CurrentLevel.MaxSpawn;
                     counter = 0;
-
-                    /* Modificare */
+                    
                     GameObject.FindWithTag("GameController").GetComponent<Text>().text = "Level 3";
                 }
-                else if (levelControl.CurrentLevel.Number == 3 && counter == 2)
+                else if (levelControl.CurrentLevel.Number+1 == 4 && counter == 4)
                 {
                     levelControl.CurrentLevel = new Level(4);
                     cooldown = levelControl.CurrentLevel.CooldownSpawn;
@@ -81,19 +79,22 @@ public class Wave : MonoBehaviour
                     maxEnemies = levelControl.CurrentLevel.MaxSpawn;
                     counter = 0;
 
+                    levelControl.GetComponent<AudioSource>().Stop();
+                    levelControl.GetComponent<AudioSource>().PlayOneShot(levelControl.bossTheme);
                     GameObject boss = Instantiate(Resources.Load("Enemies/Boss")) as GameObject;
                     boss.GetComponentInChildren<BossClass>().Frequency = levelControl.CurrentLevel.EnemyBossFrequency;
+                    boss.GetComponentInChildren<BossClass>().Amplitude = levelControl.CurrentLevel.EnemyBossAmplitude;
                     boss.GetComponentInChildren<BossClass>().Cooldown = levelControl.CurrentLevel.EnemyBossCooldown;
                     boss.GetComponentInChildren<BossClass>().RushCooldown = levelControl.CurrentLevel.EnemyBossRushCooldown;
                     boss.GetComponentInChildren<BossClass>().RushFrequency = levelControl.CurrentLevel.EnemyBossRushFrequency;
+                    boss.GetComponentInChildren<BossClass>().RushAmplitude = levelControl.CurrentLevel.EnemyBossRushAmplitude;
                     boss.GetComponentInChildren<BossClass>().RushSpeed = levelControl.CurrentLevel.EnemyBossRushSpeed;
-
-                    /* Modificare */
+                    
                     GameObject.FindWithTag("GameController").GetComponent<Text>().text = "Level 4";
                 }
 
                 SpawnWave();
-                resetWave = Time.time + cooldown;
+                resetWave = Time.timeSinceLevelLoad + cooldown;
             }
         }
     }
@@ -145,7 +146,7 @@ public class Wave : MonoBehaviour
     public void PauseOn()
     {
         canSpawn = false;
-        pauseStart = Time.time;
+        pauseStart = Time.timeSinceLevelLoad;
 
         for (int i = 0; i < indexList.Count; i++)
             spawnPoints[indexList[i]].GetComponent<Animator>().speed = 0f;
@@ -154,7 +155,7 @@ public class Wave : MonoBehaviour
     public void PauseOff()
     {
         canSpawn = true;
-        pauseFinish = Time.time;
+        pauseFinish = Time.timeSinceLevelLoad;
 
         for (int i = 0; i < indexList.Count; i++)
             spawnPoints[indexList[i]].GetComponent<Animator>().speed = 1f;

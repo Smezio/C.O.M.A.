@@ -25,13 +25,14 @@ public class SpawnPoint : MonoBehaviour
         GetComponent<Animator>().enabled = false;
         GetComponent<SpriteRenderer>().sprite = null;
         index = Random.Range(0, enemies.Length);
-        enemy = Instantiate(enemies[index], transform.position, transform.rotation);
+        enemy = Instantiate(enemies[index], new Vector3(transform.position.x, transform.position.y, -1.2f), transform.rotation);
 
         if (enemy.name.Contains("Circle"))
         {
             enemy.GetComponentInChildren<EnemyCircleClass>().Facing(gameObject.name.Substring(gameObject.name.Length - 2));
             enemy.GetComponentInChildren<EnemyCircleClass>().Speed = levelControl.CurrentLevel.EnemyCircleSpeed;
             enemy.GetComponentInChildren<EnemyCircleClass>().Frequency = levelControl.CurrentLevel.EnemyCircleFrequency;
+            enemy.GetComponentInChildren<EnemyCircleClass>().Amplitude = levelControl.CurrentLevel.EnemyCircleAmplitude;
             enemy.GetComponentInChildren<EnemyCircleClass>().Cooldown = levelControl.CurrentLevel.EnemyCircleCooldown;
         }
         else if (enemy.name.Contains("Line"))
@@ -45,6 +46,7 @@ public class SpawnPoint : MonoBehaviour
             enemy.GetComponentInChildren<EnemyDashClass>().Facing(gameObject.name.Substring(gameObject.name.Length - 2));
             enemy.GetComponentInChildren<EnemyDashClass>().Speed = levelControl.CurrentLevel.EnemyDashSpeed;
             enemy.GetComponentInChildren<EnemyDashClass>().Frequency = levelControl.CurrentLevel.EnemyDashFrequency;
+            enemy.GetComponentInChildren<EnemyDashClass>().Amplitude = levelControl.CurrentLevel.EnemyDashAmplitude;
             enemy.GetComponentInChildren<EnemyDashClass>().Cooldown = levelControl.CurrentLevel.EnemyDashCooldown;
         }
         else if (enemy.name.Contains("Charger"))

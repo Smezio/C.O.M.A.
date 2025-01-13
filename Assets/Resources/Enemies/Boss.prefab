@@ -191,7 +191,8 @@ AudioSource:
   m_GameObject: {fileID: 5947888915304958971}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 243024418166208544, guid: 3f8f0cc960a4e6b4abb452030c3c4b97,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -291,6 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoint: 1
+  deathEnemyAudio: {fileID: 0}
   shootAudio: {fileID: 8300000, guid: 4d0c1e99b5bcc9b43b40ac8d08d97913, type: 3}
   laughtAudio: {fileID: 8300000, guid: faef0a8e2f03da340ae63da4b7e5fc80, type: 3}
   deathAudio: {fileID: 8300000, guid: 2b477bf3b648fcb42b5fde1fa5b4db2f, type: 3}

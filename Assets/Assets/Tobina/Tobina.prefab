@@ -294,7 +294,8 @@ AudioSource:
   m_GameObject: {fileID: 3839174357448040396}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 243024418166208544, guid: 3f8f0cc960a4e6b4abb452030c3c4b97,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -393,9 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015479c30f7e894458272d01592e45b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxhealthPoint: 4
   cooldownImmune: 2
-  speed: 55
+  speed: 50
   defaultBullet: {fileID: 6477088380431855885, guid: f573a81ea5e35204a98be59b975cb20a,
     type: 3}
   cooldownShoot: 0.8

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class SceneControlScript : MonoBehaviour
 {
-    Transform pauseMenu;
+    Transform gameMenu;
     private bool inPause;
     private bool gameOver;
     private bool gameVictory;
@@ -17,10 +19,16 @@ public class SceneControlScript : MonoBehaviour
     private Wave wave;
     private BackgroundMovement[] background;
 
+    public AudioMixer audioMixer;
     public AudioClip mainTheme;
     public AudioClip bossTheme;
     public AudioClip deathTheme;
     public AudioClip victoryTheme;
+
+    Transform screenRes;
+    Transform masterVol;
+    Transform musicVol;
+    Transform sfxVol;
 
     private Level currentLevel;
 
@@ -30,7 +38,7 @@ public class SceneControlScript : MonoBehaviour
         inPause = false;
         gameOver = false;
         gameVictory = false;
-        pauseMenu = GameObject.Find("PauseMenu").transform;
+        gameMenu = GameObject.Find("GameMenu").transform;
         player = GameObject.FindGameObjectWithTag("Player");
         wave = GameObject.Find("Wave").GetComponent<Wave>();
         background = GameObject.Find("Backgrounds").GetComponentsInChildren<BackgroundMovement>();
@@ -60,8 +68,8 @@ public class SceneControlScript : MonoBehaviour
             if (!inPause)
             {
                 inPause = true;
-                pauseMenu.GetChild(0).gameObject.SetActive(true);
-                pauseMenu.GetChild(1).gameObject.SetActive(true);
+                gameMenu.GetChild(0).gameObject.SetActive(true);
+                gameMenu.GetChild(1).gameObject.SetActive(true);
 
                 for (int i = 0; i < enemies.Length; i++)
                     enemies[i].GetComponent<EnemyClass>().PauseOn();
@@ -81,25 +89,97 @@ public class SceneControlScript : MonoBehaviour
 
     public void Resume()
     {
-        inPause = false;
-        pauseMenu.GetChild(0).gameObject.SetActive(false);
-        pauseMenu.GetChild(1).gameObject.SetActive(false);
+        if (!gameMenu.GetChild(4).gameObject.active)
+        {
+            inPause = false;
+            gameMenu.GetChild(0).gameObject.SetActive(false);
+            gameMenu.GetChild(1).gameObject.SetActive(false);
 
-        for (int i = 0; i < enemies.Length; i++)
-            enemies[i].GetComponent<EnemyClass>().PauseOff();
-        for (int i = 0; i < bullets.Length; i++)
-            bullets[i].GetComponent<BulletClass>().PauseOff();
-        player.GetComponent<PlayerClass>().PauseOff();
-        if (boss != null)
-            boss.GetComponent<BossClass>().PauseOff();
-        wave.PauseOff();
-        for (int i = 0; i < background.Length; i++)
-            background[i].PauseOff();
+            for (int i = 0; i < enemies.Length; i++)
+                enemies[i].GetComponent<EnemyClass>().PauseOff();
+            for (int i = 0; i < bullets.Length; i++)
+                bullets[i].GetComponent<BulletClass>().PauseOff();
+            player.GetComponent<PlayerClass>().PauseOff();
+            if (boss != null)
+                boss.GetComponent<BossClass>().PauseOff();
+            wave.PauseOff();
+            for (int i = 0; i < background.Length; i++)
+                background[i].PauseOff();
+        }
+        else
+        {
+            gameMenu.GetChild(4).gameObject.SetActive(false);
+            gameMenu.GetChild(1).gameObject.SetActive(true);
+        }
     }
 
     public void Rematch()
     {
         SceneManager.LoadScene(2);
+    }
+
+    public void Option()
+    {
+        gameMenu.GetChild(1).gameObject.SetActive(false);
+        gameMenu.GetChild(4).gameObject.SetActive(true);
+
+        screenRes = gameMenu.GetChild(4).GetChild(2);
+        masterVol = gameMenu.GetChild(4).GetChild(3);
+        musicVol = gameMenu.GetChild(4).GetChild(4);
+        sfxVol = gameMenu.GetChild(4).GetChild(5);
+        /* CARICAMENTO VALORI DELLE OPZIONI */
+        List<string> resolutions = new List<string>();
+        int index = 0;
+        for (int i = 0; i < Screen.resolutions.Length; i++)
+        {
+            resolutions.Add(Screen.resolutions[i].ToString());
+
+            if (Screen.resolutions[i].ToString().Equals(Screen.currentResolution.ToString()))
+            {
+                index = i;
+            }
+               
+        }
+        screenRes.GetComponentInChildren<Dropdown>().AddOptions(resolutions);
+        screenRes.GetComponentInChildren<Dropdown>().value = index;
+
+        float level = 0;
+        audioMixer.GetFloat("Master", out level);
+        masterVol.GetComponentInChildren<Slider>().value = level;
+        masterVol.GetChild(1).GetComponent<Text>().text = ((int)level).ToString();
+        audioMixer.GetFloat("Music", out level);
+        musicVol.GetComponentInChildren<Slider>().value = level;
+        musicVol.GetChild(1).GetComponent<Text>().text = ((int)level).ToString();
+        audioMixer.GetFloat("SFX", out level);
+        sfxVol.GetComponentInChildren<Slider>().value = level;
+        sfxVol.GetChild(1).GetComponent<Text>().text = ((int)level).ToString();
+    }
+
+    public void ChangeOptions(Transform option)
+    {
+        if (option.parent.name.Equals("ScreenRes"))
+        {
+            /* Cambio risoluzione **TESTARE DOPO BUILD** */
+            string res = option.GetComponent<Dropdown>().options[option.GetComponent<Dropdown>().value].text;
+            string[] temp = res.Split((' '));
+            Screen.SetResolution(int.Parse(temp[0]), int.Parse(temp[2]), FullScreenMode.ExclusiveFullScreen, int.Parse(temp[4].Substring(0,2)));
+            Debug.Log(int.Parse(temp[0]) + " " + int.Parse(temp[2]) + " " + int.Parse(temp[4].Substring(0, 2)));
+        }
+        else if (option.parent.name.Equals("MasterVol"))
+        {
+            audioMixer.SetFloat("Master", masterVol.GetComponentInChildren<Slider>().value);
+            masterVol.GetChild(1).GetComponent<Text>().text = masterVol.GetComponentInChildren<Slider>().value.ToString();
+        }
+        else if (option.parent.name.Equals("MusicVol"))
+        {
+            audioMixer.SetFloat("Music", musicVol.GetComponentInChildren<Slider>().value);
+            musicVol.GetChild(1).GetComponent<Text>().text = musicVol.GetComponentInChildren<Slider>().value.ToString();
+        }
+        else if (option.parent.name.Equals("SFXVol"))
+        {
+            audioMixer.SetFloat("SFX", sfxVol.GetComponentInChildren<Slider>().value);
+            sfxVol.GetChild(1).GetComponent<Text>().text = sfxVol.GetComponentInChildren<Slider>().value.ToString();
+        }
     }
 
     public void QuitGame()
@@ -118,8 +198,8 @@ public class SceneControlScript : MonoBehaviour
             boss = null;
 
         gameOver = true;
-        pauseMenu.GetChild(0).gameObject.SetActive(true);
-        pauseMenu.GetChild(2).gameObject.SetActive(true);
+        gameMenu.GetChild(0).gameObject.SetActive(true);
+        gameMenu.GetChild(2).gameObject.SetActive(true);
 
         for (int i = 0; i < enemies.Length; i++)
             enemies[i].GetComponent<EnemyClass>().PauseOn();
@@ -141,8 +221,8 @@ public class SceneControlScript : MonoBehaviour
     public void GameVictoryMode()
     {
         gameVictory = true;
-        pauseMenu.GetChild(0).gameObject.SetActive(true);
-        pauseMenu.GetChild(3).gameObject.SetActive(true);
+        gameMenu.GetChild(0).gameObject.SetActive(true);
+        gameMenu.GetChild(3).gameObject.SetActive(true);
 
         player.GetComponent<PlayerClass>().PauseOn();
 
@@ -228,74 +308,91 @@ public struct Level
                     minSpawn = 3;
                     maxSpawn = 6;
                     cooldownSpawn = 10f;
+
                     enemyLineSpeed = 0.5f;
                     enemyLineCooldown = 3f;
+
                     enemyDashSpeed = 0.5f;
                     enemyDashFrequency = 7f;
                     enemyDashAmplitude = 0.3f;
                     enemyDashCooldown = 5f;
+
                     enemyCircleSpeed = 0.5f;
                     enemyCircleFrequency = 6.5f;
                     enemyCircleAmplitude = 0.4f;
                     enemyCircleCooldown = 5f;
+
                     enemyChargeSpeed = 0.5f;
                 }
                 break;
 
             case 2:
                 {
-                    minSpawn = 6;
-                    maxSpawn = 8;
+                    minSpawn = 4;
+                    maxSpawn = 6;
                     cooldownSpawn = 7f;
+
                     enemyLineSpeed = 0.5f;
                     enemyLineCooldown = 2f;
-                    enemyDashSpeed = 1f;
-                    enemyDashFrequency = 7f;
+
+                    enemyDashSpeed = 0.6f;
+                    enemyDashFrequency = 5.5f;
                     enemyDashAmplitude = 0.3f;
-                    enemyDashCooldown = 3f;
-                    enemyCircleSpeed = 1f;
-                    enemyCircleFrequency = 6.5f;
-                    enemyCircleAmplitude = 0.4f;
+                    enemyDashCooldown = 4f;
+
+                    enemyCircleSpeed = 0.6f;
+                    enemyCircleFrequency = 5.5f;
+                    enemyCircleAmplitude = 0.3f;
                     enemyCircleCooldown = 3f;
-                    enemyChargeSpeed = 1f;
+
+                    enemyChargeSpeed = 1.3f;
                 }
                 break;
 
             case 3:
                 {
-                    minSpawn = 6;
-                    maxSpawn = 8;
+                    minSpawn = 4;
+                    maxSpawn = 6;
                     cooldownSpawn = 4f;
+
                     enemyLineSpeed = 0.6f;
                     enemyLineCooldown = 2f;
-                    enemyDashSpeed = 1.2f;
-                    enemyDashFrequency = 7f;
+
+                    enemyDashSpeed = 0.7f;
+                    enemyDashFrequency = 5.5f;
                     enemyDashAmplitude = 0.3f;
-                    enemyDashCooldown = 2f;
-                    enemyCircleSpeed = 1.2f;
-                    enemyCircleFrequency = 7f;
+                    enemyDashCooldown = 3f;
+
+                    enemyCircleSpeed = 0.7f;
+                    enemyCircleFrequency = 5.5f;
                     enemyCircleAmplitude = 0.3f;
-                    enemyCircleCooldown = 2f;
+                    enemyCircleCooldown = 3f;
+
                     enemyChargeSpeed = 1.5f;
                 }
                 break;
 
             case 4:
                 {
-                    minSpawn = 6;
-                    maxSpawn = 8;
+                    minSpawn = 4;
+                    maxSpawn = 5;
                     cooldownSpawn = 7f;
+
                     enemyLineSpeed = 0.5f;
                     enemyLineCooldown = 2f;
-                    enemyDashSpeed = 1f;
+
+                    enemyDashSpeed = 0.6f;
                     enemyDashFrequency = 7f;
                     enemyDashAmplitude = 0.3f;
-                    enemyDashCooldown = 3f;
-                    enemyCircleSpeed = 1f;
+                    enemyDashCooldown = 4f;
+
+                    enemyCircleSpeed = 0.6f;
                     enemyCircleFrequency = 6.5f;
                     enemyCircleAmplitude = 0.4f;
                     enemyCircleCooldown = 3f;
+
                     enemyChargeSpeed = 1f;
+
                     enemyBossSpawn = true;
                     enemyBossFrequency = 0.8f;
                     enemyBossAmplitude = 0.5f;

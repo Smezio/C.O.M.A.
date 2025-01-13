@@ -8,6 +8,9 @@ public class Dialog : MonoBehaviour
     public string[] sentences;
     public float typewriterTime;
 
+    private bool gameOutro;
+    public Transform choiceMenu;
+
     private TextMeshProUGUI textDisplayed;
     private int index = 0;
 
@@ -15,11 +18,38 @@ public class Dialog : MonoBehaviour
     {
         textDisplayed = GetComponent<TextMeshProUGUI>();
         StartCoroutine(Type());
+
+        gameOutro = false;
     }
 
     private void Update()
     {
-        if (textDisplayed.text == sentences[index])
+        if (choiceMenu.gameObject.activeSelf)
+        {
+            if (Input.GetButtonDown("Horizontal"))
+            {
+                if (choiceMenu.GetChild(0).GetComponent<TextMeshProUGUI>().fontStyle == FontStyles.Underline)
+                {
+                    choiceMenu.GetChild(0).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
+                    choiceMenu.GetChild(1).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
+                }
+                else
+                {
+                    choiceMenu.GetChild(0).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
+                    choiceMenu.GetChild(1).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && gameOutro)
+            {
+                if (choiceMenu.GetChild(0).GetComponent<TextMeshProUGUI>().fontStyle == FontStyles.Underline)
+                    SceneManager.LoadScene(2);
+                else
+                    Application.Quit();
+            }
+        }
+
+        if (textDisplayed.text == sentences[index] && !choiceMenu.gameObject.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Space))
                 NextSentence();
@@ -45,7 +75,14 @@ public class Dialog : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(2);
+            if (SceneManager.GetActiveScene().name.Equals("IntroScene"))
+                SceneManager.LoadScene(2);
+            else
+            {
+                choiceMenu.gameObject.SetActive(true);
+                gameOutro = true;
+            }
+                
         }
     }
 

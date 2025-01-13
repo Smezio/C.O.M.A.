@@ -34,14 +34,14 @@ public class PlayerShoot : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Time.time > cooldown)
+            if (Time.timeSinceLevelLoad > cooldown)
                 NextFire = true;
 
-            if (NextFire && Time.time > cooldown)
+            if (NextFire && Time.timeSinceLevelLoad > cooldown)
             {
                 GetComponent<Animator>().SetBool("ShootClick", true);
 
-                cooldown = Time.time + time;
+                cooldown = Time.timeSinceLevelLoad + time;
             }
         }
     }
